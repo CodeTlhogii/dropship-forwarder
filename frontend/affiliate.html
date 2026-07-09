@@ -152,4 +152,84 @@
     loadAffiliateProfile();
 </script>
 </body>
+
+
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14 sm:h-16">
+            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="dashboard.html" class="text-blue-600 font-medium text-sm">Dashboard</a>
+                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="portal.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            </div>
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="logout()" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
+                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-1">
+                <a href="dashboard.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
+                <a href="analytics.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
+                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="portal.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
+                <a href="affiliate.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <button onclick="logout()" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<style>
+    .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+    .mobile-menu.open { max-height: 500px; }
+    .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+    .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+    .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+    .hamburger.active div:nth-child(2) { opacity: 0; }
+    .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+</style>
+
+<script>
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.toggle('open');
+            if (hamburger) hamburger.classList.toggle('active');
+        }
+    }
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.remove('open');
+            if (hamburger) hamburger.classList.remove('active');
+        }
+    }
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) { closeMobileMenu(); }
+    });
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+</script>
+
+
+
 </html>
