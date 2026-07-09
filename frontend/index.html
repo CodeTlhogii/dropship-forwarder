@@ -1,177 +1,311 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en-ZA">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dropship Forwarder - Login</title>
+    
+    <!-- Primary SEO Tags -->
+    <title>Dropship Forwarder | #1 Freight Forwarding for South African Dropshippers</title>
+    <meta name="description" content="Ship from China & USA to South Africa in 10-15 days. DDP customs clearance, real-time tracking, and bulk CSV upload. Trusted by 500+ dropshippers.">
+    <meta name="keywords" content="dropshipping south africa, freight forwarding, china to south africa shipping, usa to south africa shipping, ddp customs, dropship forwarder">
+    <meta name="author" content="Dropship Forwarder">
+    <meta name="robots" content="index, follow">
+    <meta name="language" content="English">
+    <meta name="revisit-after" content="7 days">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://dropshipforwarder.co.za/">
+    <meta property="og:title" content="Dropship Forwarder - Freight Forwarding for South African Dropshippers">
+    <meta property="og:description" content="Ship from China & USA to South Africa in 10-15 days. DDP customs clearance included. Start your free trial today.">
+    <meta property="og:image" content="https://dropshipforwarder.co.za/og-image.jpg">
+    
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Dropship Forwarder - Freight Forwarding for South African Dropshippers">
+    <meta name="twitter:description" content="Ship from China & USA to South Africa in 10-15 days. DDP customs clearance included.">
+    <meta name="twitter:image" content="https://dropshipforwarder.co.za/twitter-image.jpg">
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href="https://dropshipforwarder.co.za/">
+    
     <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    
+    <!-- Schema.org markup for Google -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Dropship Forwarder",
+        "url": "https://dropshipforwarder.co.za",
+        "logo": "https://dropshipforwarder.co.za/logo.png",
+        "sameAs": [
+            "https://facebook.com/dropshipforwarder",
+            "https://twitter.com/dropshipforwarder",
+            "https://instagram.com/dropshipforwarder"
+        ],
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+27-12-345-6789",
+            "contactType": "customer service",
+            "availableLanguage": ["English", "Afrikaans"]
+        },
+        "areaServed": "ZA",
+        "description": "Freight forwarding platform for South African dropshippers shipping from China and USA."
+    }
+    </script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
-    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
+        .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+    </style>
 </head>
-<body class="bg-gray-100">
+<body class="bg-white">
 
-
-        <nav class="bg-white shadow-md">
-    <div class="max-w-7xl mx-auto px-4 py-4">
-        <div class="flex justify-between items-center">
-            <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Dropship Forwarder
-            </a>
-            <div class="flex space-x-4">
-                <a href="landing.html" class="text-gray-600 hover:text-blue-600">Home</a>
-                <a href="portal.html" class="text-gray-600 hover:text-blue-600">Track Order</a>
-                <a href="register.html" class="text-blue-600 hover:underline">Sign Up</a>
+<!-- Navigation -->
+<nav class="bg-white shadow-md fixed w-full z-50 top-0">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-8">
+                <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Dropship Forwarder
+                </a>
+                <div class="hidden md:flex space-x-6">
+                    <a href="#features" class="text-gray-700 hover:text-blue-600">Features</a>
+                    <a href="#pricing" class="text-gray-700 hover:text-blue-600">Pricing</a>
+                    <a href="#how-it-works" class="text-gray-700 hover:text-blue-600">How It Works</a>
+                    <a href="#faq" class="text-gray-700 hover:text-blue-600">FAQ</a>
+                    <a href="tracking.html" class="text-gray-700 hover:text-blue-600">Track</a>
+                </div>
+            </div>
+            <div class="flex space-x-3">
+                <a href="login.html" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">Login</a>
+                <a href="register.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-lg">Sign Up Free →</a>
             </div>
         </div>
     </div>
 </nav>
 
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
-            <div class="text-center mb-8">
-                <h1 class="text-3xl font-bold text-blue-600">Dropship Forwarder</h1>
-                <p class="text-gray-600 mt-2">Freight forwarding for dropshippers</p>
+<!-- Hero Section -->
+<section class="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <div class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
+            🚀 Trusted by 500+ South African Dropshippers
+        </div>
+        <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
+            Ship from China & USA to 
+            <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">South Africa</span>
+            in 10-15 Days
+        </h1>
+        <p class="text-xl text-gray-600 max-w-3xl mx-auto mb-8">
+            The all-in-one freight forwarding platform for dropshippers. Consolidate, clear customs, and deliver to your customers with zero hassle.
+        </p>
+        <div class="flex flex-col sm:flex-row gap-4 justify-center">
+            <a href="register.html" class="px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 text-lg">
+                Start Your Free Trial →
+            </a>
+            <a href="#how-it-works" class="px-8 py-3 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50 text-lg">
+                Watch Demo Video
+            </a>
+        </div>
+        <p class="text-sm text-gray-500 mt-4">✅ No credit card required • 14-day free trial • Cancel anytime</p>
+    </div>
+</section>
+
+<!-- Features -->
+<section id="features" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Everything You Need to Scale Your Dropshipping Business</h2>
+            <p class="text-xl text-gray-600">Stop worrying about logistics. Focus on growing your store.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8">
+            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+                <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-2xl">📦</div>
+                <h3 class="text-xl font-bold mb-2" itemprop="name">Consolidation Service</h3>
+                <p class="text-gray-600" itemprop="description">Combine multiple orders from different suppliers into one package. Save up to 60% on shipping.</p>
             </div>
-            
-            <div id="loginForm">
-                <h2 class="text-xl font-bold mb-4">Login</h2>
-                <input type="email" id="loginEmail" placeholder="Email" class="w-full border rounded px-3 py-2 mb-3">
-                <input type="password" id="loginPassword" placeholder="Password" class="w-full border rounded px-3 py-2 mb-4">
-                <button onclick="login()" class="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700">Login</button>
-                <p class="text-center text-sm text-gray-600 mt-4">
-                    Don't have an account? 
-                    <button onclick="showRegister()" class="text-blue-600 hover:underline">Register</button>
-                </p>
+            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+                <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-2xl">🛃</div>
+                <h3 class="text-xl font-bold mb-2" itemprop="name">DDP Customs Clearance</h3>
+                <p class="text-gray-600" itemprop="description">Delivered Duty Paid - Your customers pay nothing extra. We handle all SARS paperwork.</p>
             </div>
-            
-            <div id="registerForm" class="hidden">
-                <h2 class="text-xl font-bold mb-4">Register</h2>
-                <input type="email" id="regEmail" placeholder="Email" class="w-full border rounded px-3 py-2 mb-3">
-                <input type="text" id="regCompany" placeholder="Company Name" class="w-full border rounded px-3 py-2 mb-3">
-                <input type="tel" id="regPhone" placeholder="Phone" class="w-full border rounded px-3 py-2 mb-3">
-                <input type="password" id="regPassword" placeholder="Password (min 6 chars)" class="w-full border rounded px-3 py-2 mb-4">
-                <button onclick="register()" class="w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Register</button>
-                <p class="text-center text-sm text-gray-600 mt-4">
-                    Already have an account? 
-                    <button onclick="showLogin()" class="text-blue-600 hover:underline">Login</button>
-                </p>
+            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+                <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 text-2xl">🔍</div>
+                <h3 class="text-xl font-bold mb-2" itemprop="name">Real-Time Tracking</h3>
+                <p class="text-gray-600" itemprop="description">Branded tracking page for your customers. WhatsApp and email updates automatically.</p>
             </div>
-            
-            <div id="message" class="mt-4 text-center text-sm hidden"></div>
+            <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4 text-2xl">📄</div>
+                <h3 class="text-xl font-bold mb-2">Automated Customs Forms</h3>
+                <p class="text-gray-600">Generate SARS-compliant customs declarations in one click. PDF ready for printing.</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="w-12 h-12 bg-red-100 rounded-lg flex items-center justify-center mb-4 text-2xl">📊</div>
+                <h3 class="text-xl font-bold mb-2">Bulk CSV Upload</h3>
+                <p class="text-gray-600">Import hundreds of orders at once. Perfect for high-volume dropshippers.</p>
+            </div>
+            <div class="bg-white rounded-xl p-6 card-hover">
+                <div class="w-12 h-12 bg-indigo-100 rounded-lg flex items-center justify-center mb-4 text-2xl">🤝</div>
+                <h3 class="text-xl font-bold mb-2">Affiliate Program</h3>
+                <p class="text-gray-600">Earn 10% commission by referring other dropshippers to our platform.</p>
+            </div>
         </div>
     </div>
+</section>
 
-    <script>
+<!-- FAQ Section -->
+<section id="faq" class="py-20 bg-white">
+    <div class="max-w-4xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+            <p class="text-xl text-gray-600">Everything you need to know about shipping with us</p>
+        </div>
+        <div class="space-y-4" itemscope itemtype="https://schema.org/FAQPage">
+            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-bold text-lg mb-2" itemprop="name">How long does shipping from China to South Africa take?</h3>
+                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">Standard shipping takes 10-15 business days from China to South Africa. Express shipping available for 5-7 days.</div>
+                </div>
+            </div>
+            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-bold text-lg mb-2" itemprop="name">What is DDP and why do I need it?</h3>
+                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">DDP (Delivered Duty Paid) means all customs duties and taxes are prepaid. Your customer pays nothing on delivery — higher conversion rates for you.</div>
+                </div>
+            </div>
+            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-bold text-lg mb-2" itemprop="name">Do you ship from the USA as well?</h3>
+                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">Yes! We have warehouse facilities in both China and the USA. Shipping from USA to South Africa takes 7-12 days.</div>
+                </div>
+            </div>
+            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
+                <h3 class="font-bold text-lg mb-2" itemprop="name">What payment methods do you accept?</h3>
+                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
+                    <div itemprop="text">We accept EFT / wire transfer, credit card via PayFast, and wallet deposits. Monthly subscription available.</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
+<!-- How It Works -->
+<section id="how-it-works" class="py-20 bg-gray-50">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">How It Works</h2>
+        <p class="text-xl text-gray-600 mb-12">Simple 4-step process. Your customers will thank you.</p>
+        <div class="grid md:grid-cols-4 gap-8">
+            <div><div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">1</div><h3 class="text-lg font-bold mb-2">Connect Your Store</h3><p class="text-gray-600">Integrate Shopify, WooCommerce, or upload CSV</p></div>
+            <div><div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">2</div><h3 class="text-lg font-bold mb-2">Ship to Our Warehouse</h3><p class="text-gray-600">Send products to our China or USA address</p></div>
+            <div><div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">3</div><h3 class="text-lg font-bold mb-2">We Consolidate & Clear</h3><p class="text-gray-600">Combine orders, prepay duties, clear customs</p></div>
+            <div><div class="w-20 h-20 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4 text-2xl font-bold text-blue-600">4</div><h3 class="text-lg font-bold mb-2">Delivery to Customer</h3><p class="text-gray-600">Fast last-mile delivery across South Africa</p></div>
+        </div>
+    </div>
+</section>
 
-         // Add this to the top of the script section in index.html
-// Capture referral code from URL
-const urlParams = new URLSearchParams(window.location.search);
-const referralCode = urlParams.get('ref');
-if (referralCode) {
-    // Store it temporarily
-    sessionStorage.setItem('referralCode', referralCode);
-}
+<!-- Pricing -->
+<section id="pricing" class="py-20 bg-white">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-12">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Simple, Transparent Pricing</h2>
+            <p class="text-xl text-gray-600">No hidden fees. Pay as you grow.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
+            <div class="bg-gray-50 rounded-xl p-8 card-hover">
+                <h3 class="text-2xl font-bold mb-2">Starter</h3>
+                <div class="text-4xl font-bold mb-4">R499<span class="text-lg text-gray-500">/month</span></div>
+                <ul class="space-y-3 mb-8"><li>✓ 50 orders/month</li><li>✓ Basic tracking</li><li>✓ Email support</li><li>✓ CSV upload</li></ul>
+                <a href="register.html" class="block text-center px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">Start Free Trial</a>
+            </div>
+            <div class="bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl p-8 text-white transform scale-105 shadow-xl">
+                <div class="inline-block px-3 py-1 bg-white/20 rounded-full text-sm mb-4">🔥 MOST POPULAR</div>
+                <h3 class="text-2xl font-bold mb-2">Professional</h3>
+                <div class="text-4xl font-bold mb-4">R999<span class="text-lg text-white/80">/month</span></div>
+                <ul class="space-y-3 mb-8"><li>✓ 200 orders/month</li><li>✓ Real-time tracking</li><li>✓ Priority support</li><li>✓ Bulk CSV upload</li><li>✓ Customs PDF generation</li><li>✓ WhatsApp & Email alerts</li></ul>
+                <a href="register.html" class="block text-center px-4 py-2 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100">Start Free Trial →</a>
+            </div>
+            <div class="bg-gray-50 rounded-xl p-8 card-hover">
+                <h3 class="text-2xl font-bold mb-2">Enterprise</h3>
+                <div class="text-4xl font-bold mb-4">Custom</div>
+                <ul class="space-y-3 mb-8"><li>✓ Unlimited orders</li><li>✓ Dedicated account manager</li><li>✓ API access</li><li>✓ Custom integrations</li><li>✓ 24/7 phone support</li></ul>
+                <a href="contact.html" class="block text-center px-4 py-2 border-2 border-blue-600 text-blue-600 rounded-lg font-semibold hover:bg-blue-50">Contact Sales</a>
+            </div>
+        </div>
+    </div>
+</section>
 
-// When registering, include the referral code in the API call
-async function register() {
-    const email = document.getElementById('regEmail').value;
-    const company_name = document.getElementById('regCompany').value;
-    const phone = document.getElementById('regPhone').value;
-    const password = document.getElementById('regPassword').value;
-    
-    // Get referral code
-    const refCode = sessionStorage.getItem('referralCode') || '';
-    
-    if (password.length < 6) {
-        showMessage('Password must be at least 6 characters', 'red');
-        return;
+<!-- CTA -->
+<section class="py-20 gradient-bg">
+    <div class="max-w-4xl mx-auto text-center px-4">
+        <h2 class="text-3xl md:text-4xl font-bold text-white mb-4">Ready to Scale Your Dropshipping Business?</h2>
+        <p class="text-xl text-white/90 mb-8">Join 500+ South African dropshippers who trust us with their logistics</p>
+        <a href="register.html" class="inline-block px-8 py-3 bg-white text-blue-600 rounded-lg font-semibold hover:bg-gray-100 text-lg">Start Your 14-Day Free Trial →</a>
+        <p class="text-white/70 text-sm mt-4">No credit card required • Cancel anytime</p>
+    </div>
+</section>
+
+<!-- Footer -->
+<footer class="bg-gray-900 py-12">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="grid md:grid-cols-4 gap-8">
+            <div>
+                <h3 class="text-white font-bold mb-4">Dropship Forwarder</h3>
+                <p class="text-gray-400 text-sm">The #1 freight forwarding solution for South African dropshippers.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Quick Links</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="#features" class="hover:text-white">Features</a></li>
+                    <li><a href="#pricing" class="hover:text-white">Pricing</a></li>
+                    <li><a href="#how-it-works" class="hover:text-white">How It Works</a></li>
+                    <li><a href="tracking.html" class="hover:text-white">Track Package</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Account</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li><a href="login.html" class="hover:text-white">Login</a></li>
+                    <li><a href="register.html" class="hover:text-white">Register</a></li>
+                    <li><a href="dashboard.html" class="hover:text-white">Dashboard</a></li>
+                </ul>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-4">Contact</h4>
+                <ul class="space-y-2 text-gray-400 text-sm">
+                    <li>📧 support@dropshipforwarder.co.za</li>
+                    <li>📞 +27 12 345 6789</li>
+                    <li>📍 Pretoria, South Africa</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400 text-sm">
+            <p>© 2026 Dropship Forwarder. All rights reserved.</p>
+        </div>
+    </div>
+</footer>
+
+<script>
+    const token = localStorage.getItem('token');
+    if (token) {
+        // Update navigation for logged-in users
+        const loginBtn = document.querySelector('a[href="login.html"]');
+        const signupBtn = document.querySelector('a[href="register.html"]');
+        
+        if (loginBtn) {
+            loginBtn.textContent = 'Dashboard';
+            loginBtn.href = 'dashboard.html';
+        }
+        if (signupBtn) {
+            signupBtn.textContent = 'Dashboard';
+            signupBtn.href = 'dashboard.html';
+        }
     }
-    
-    try {
-        // Build URL with referral parameter
-        let url = `${API_URL}/auth/register`;
-        if (refCode) {
-            url += `?ref=${refCode}`;
-        }
-        
-        const response = await axios.post(url, {
-            email, password, company_name, phone
-        });
-        localStorage.setItem('token', response.data.token);
-        
-        // Clear referral code
-        sessionStorage.removeItem('referralCode');
-        
-        window.location.href = 'dashboard.html';
-    } catch (error) {
-        showMessage(error.response?.data?.error || 'Registration failed', 'red');
-    }
-}
-
-
-       const API_URL = window.location.hostname === 'localhost' 
-    ? 'http://localhost:3000/api' 
-    : 'https://dropship-forwarder-api.onrender.com/api';
-        
-        async function login() {
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            try {
-                const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-                localStorage.setItem('token', response.data.token);
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                showMessage(error.response?.data?.error || 'Login failed', 'red');
-            }
-        }
-        
-        async function register() {
-            const email = document.getElementById('regEmail').value;
-            const company_name = document.getElementById('regCompany').value;
-            const phone = document.getElementById('regPhone').value;
-            const password = document.getElementById('regPassword').value;
-            
-            if (password.length < 6) {
-                showMessage('Password must be at least 6 characters', 'red');
-                return;
-            }
-            
-            try {
-                const response = await axios.post(`${API_URL}/auth/register`, {
-                    email, password, company_name, phone
-                });
-                localStorage.setItem('token', response.data.token);
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                showMessage(error.response?.data?.error || 'Registration failed', 'red');
-            }
-        }
-        
-        function showRegister() {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.remove('hidden');
-        }
-        
-        function showLogin() {
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('loginForm').classList.remove('hidden');
-        }
-        
-        function showMessage(msg, color) {
-            const msgDiv = document.getElementById('message');
-            msgDiv.textContent = msg;
-            msgDiv.className = `mt-4 text-center text-sm p-2 rounded ${color === 'red' ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'} not-hidden`;
-            setTimeout(() => {
-                msgDiv.classList.add('hidden');
-            }, 3000);
-        }
-        
-        if (localStorage.getItem('token')) {
-            window.location.href = 'dashboard.html';
-        }
-    </script>
+</script>
 </body>
 </html>
