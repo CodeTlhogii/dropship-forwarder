@@ -4,59 +4,86 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Track Your Package - Dropship Forwarder</title>
-       <!-- Favicon -->
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
     <style>
-        .timeline-dot {
-            transition: all 0.3s ease;
-        }
-        .timeline-dot:hover {
-            transform: scale(1.2);
-        }
-        .tracking-card {
-            transition: all 0.3s ease;
-        }
+        .timeline-dot { transition: all 0.3s ease; }
+        .timeline-dot:hover { transform: scale(1.2); }
+        .tracking-card { transition: all 0.3s ease; }
+        .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+        .mobile-menu.open { max-height: 500px; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+        .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
+        .nav-spacer { height: 80px; }
+        @media (min-width: 768px) { .nav-spacer { height: 64px; } }
     </style>
 </head>
 <body class="bg-gray-100">
 
-<!-- Navigation -->
-<nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-16">
-            <div class="flex items-center space-x-6">
-                <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    Dropship Forwarder
-                </a>
-                <a href="dashboard.html" id="navDashboard" class="hidden text-gray-600 hover:text-blue-600">Dashboard</a>
-                <a href="tracking.html" class="text-blue-600 font-medium">Track Package</a>
-            </div>
-        <div class="hidden md:flex space-x-4">
-    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
-    <a href="analytics.html" class="text-gray-600 hover:text-blue-600">Analytics</a>
-    <a href="tracking.html" class="text-blue-600 font-medium">Track</a>
-    <a href="portal.html" class="text-gray-600 hover:text-blue-600">Portal</a>
-    <a href="affiliate.html" class="text-gray-600 hover:text-blue-600">Affiliate</a>
+<!-- TOP MARKETING BAR -->
+<div class="top-bar text-white text-center py-1.5 px-4 text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2">
+        <span class="font-bold">🚀 14-DAY FREE TRIAL</span>
+        <span class="hidden sm:inline">|</span>
+        <span>⚡ Ship from China & USA to SA in 10-15 days</span>
+        <span class="hidden sm:inline">|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition text-xs sm:text-sm">Sign Up Now →</a>
+    </div>
 </div>
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14 sm:h-16">
+            <!-- Logo -->
+            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
+                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+                <a href="tracking.html" class="text-blue-600 font-medium text-sm">Track</a>
+                <a href="portal.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            </div>
+            
+            <!-- Mobile -->
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="logout()" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
+                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-1">
+                <a href="dashboard.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
+                <a href="analytics.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
+                <a href="tracking.html" class="block px-3 py-2 text-sm text-blue-600 font-medium rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="portal.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
+                <a href="affiliate.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <button onclick="logout()" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </div>
         </div>
     </div>
 </nav>
 
-<script>
-    const token = localStorage.getItem('token');
-    if (token) {
-        document.getElementById('navLogin')?.classList.add('hidden');
-        document.getElementById('navDashboard')?.classList.remove('hidden');
-        document.getElementById('navLogout')?.classList.remove('hidden');
-    }
-    
-    function logout() {
-        localStorage.removeItem('token');
-        window.location.href = 'landing.html';
-    }
-</script>
+<!-- Spacer for fixed nav -->
+<div class="nav-spacer"></div>
 
 <!-- Main Content -->
 <div class="max-w-4xl mx-auto px-4 py-8">
@@ -175,12 +202,54 @@
 <!-- Footer -->
 <footer class="bg-gray-800 mt-12 py-6">
     <div class="max-w-4xl mx-auto px-4 text-center">
-        <p class="text-gray-400 text-sm">© 2025 Dropship Forwarder - South African Freight Forwarding</p>
+        <p class="text-gray-400 text-sm">© 2026 Dropship Forwarder - South African Freight Forwarding</p>
     </div>
 </footer>
 
 <script>
-    const API_URL = 'http://localhost:3000/api';
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api' 
+        : 'https://dropship-forwarder-api.onrender.com/api';
+    
+    // ==================== MOBILE MENU ====================
+    
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.toggle('open');
+            if (hamburger) hamburger.classList.toggle('active');
+        }
+    }
+    
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.remove('open');
+            if (hamburger) hamburger.classList.remove('active');
+        }
+    }
+    
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) { closeMobileMenu(); }
+    });
+    
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+    
+    // ==================== TRACKING ====================
+    
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+        // If logged in, show dashboard links
+        document.querySelectorAll('a[href="dashboard.html"]').forEach(el => {
+            el.style.display = 'inline-block';
+        });
+    }
     
     // Check URL for tracking param
     const urlParams = new URLSearchParams(window.location.search);
@@ -204,7 +273,6 @@
             return;
         }
         
-        // Hide previous results, show loading
         document.getElementById('result').classList.add('hidden');
         document.getElementById('error').classList.add('hidden');
         document.getElementById('loading').classList.remove('hidden');
@@ -321,7 +389,6 @@
             return;
         }
         
-        // Reverse for chronological order (oldest first)
         const chronologicalEvents = [...events].reverse();
         
         timeline.innerHTML = chronologicalEvents.map((event, index) => {
@@ -352,7 +419,7 @@
                         </div>
                         <p class="text-gray-600 text-sm">${escapeHtml(event.description || event.location || 'Processing')}</p>
                         <p class="text-gray-400 text-xs mt-1">${formattedDate} at ${formattedTime}</p>
-                        ${event.location ? `<p class="text-gray-500 text-xs mt-1">📍 ${escapeHtml(event.location)}</p>` : ''}
+                        ${event.location && event.location !== 'System' ? `<p class="text-gray-500 text-xs mt-1">📍 ${escapeHtml(event.location)}</p>` : ''}
                     </div>
                 </div>
             `;
@@ -416,84 +483,6 @@
         return div.innerHTML;
     }
 </script>
+
 </body>
-
-
-<!-- Navigation -->
-<nav class="bg-white shadow-md sticky top-0 z-50">
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-14 sm:h-16">
-            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
-                Dropship Forwarder
-            </a>
-            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <a href="dashboard.html" class="text-blue-600 font-medium text-sm">Dashboard</a>
-                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
-                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-                <a href="portal.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
-                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
-                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
-            </div>
-            <div class="md:hidden flex items-center gap-2">
-                <button onclick="logout()" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
-                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
-                </div>
-            </div>
-        </div>
-        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
-            <div class="py-3 space-y-1">
-                <a href="dashboard.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
-                <a href="analytics.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
-                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
-                <a href="portal.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
-                <a href="affiliate.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
-                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
-                    <button onclick="logout()" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
-                </div>
-            </div>
-        </div>
-    </div>
-</nav>
-
-<style>
-    .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
-    .mobile-menu.open { max-height: 500px; }
-    .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-    .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
-    .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
-    .hamburger.active div:nth-child(2) { opacity: 0; }
-    .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-</style>
-
-<script>
-    function toggleMobileMenu() {
-        const menu = document.getElementById('mobileMenu');
-        const hamburger = document.querySelector('.hamburger');
-        if (menu) {
-            menu.classList.toggle('open');
-            if (hamburger) hamburger.classList.toggle('active');
-        }
-    }
-    function closeMobileMenu() {
-        const menu = document.getElementById('mobileMenu');
-        const hamburger = document.querySelector('.hamburger');
-        if (menu) {
-            menu.classList.remove('open');
-            if (hamburger) hamburger.classList.remove('active');
-        }
-    }
-    window.addEventListener('resize', function() {
-        if (window.innerWidth >= 768) { closeMobileMenu(); }
-    });
-    function logout() {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    }
-</script>
-
-
-
 </html>

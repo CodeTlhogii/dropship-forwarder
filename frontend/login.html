@@ -7,53 +7,180 @@
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
+        .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+        .mobile-menu.open { max-height: 500px; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+        .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-spacer { height: 80px; }
+        @media (min-width: 768px) { .nav-spacer { height: 64px; } }
+    </style>
 </head>
 <body class="bg-gray-100">
-    <nav class="bg-white shadow-md">
-        <div class="max-w-7xl mx-auto px-4 py-4">
-            <div class="flex justify-between items-center">
-                <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dropship Forwarder</a>
-                <a href="register.html" class="text-blue-600 hover:underline">Sign Up</a>
+
+<!-- TOP MARKETING BAR -->
+<div class="top-bar text-white text-center py-1.5 px-4 text-xs sm:text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-1 sm:gap-2">
+        <span class="font-bold">🚀 14-DAY FREE TRIAL</span>
+        <span class="hidden sm:inline">|</span>
+        <span>⚡ Ship from China & USA to SA in 10-15 days</span>
+        <span class="hidden sm:inline">|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition text-xs sm:text-sm">Sign Up Now →</a>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14 sm:h-16">
+            <!-- Logo -->
+            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="/" class="text-gray-700 hover:text-blue-600 transition text-sm">Home</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="login.html" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm font-medium">Login</a>
+                <a href="register.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg text-sm">Sign Up Free →</a>
+            </div>
+            
+            <!-- Mobile -->
+            <div class="md:hidden flex items-center gap-2">
+                <a href="register.html" class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up</a>
+                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                </div>
             </div>
         </div>
-    </nav>
-    <div class="min-h-screen flex items-center justify-center">
-        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
-            <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
-            <form id="loginForm">
-                <input type="email" id="email" placeholder="Email" required class="w-full border rounded-lg px-4 py-3 mb-4">
-                <input type="password" id="password" placeholder="Password" required class="w-full border rounded-lg px-4 py-3 mb-4">
-                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">Login</button>
-            </form>
-            <p class="text-center text-sm text-gray-600 mt-4">Don't have an account? <a href="register.html" class="text-blue-600 hover:underline">Sign Up</a></p>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-1">
+                <a href="/" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Home</a>
+                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track Package</a>
+                <a href="login.html" class="block px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg transition" onclick="closeMobileMenu()">Login</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <a href="register.html" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Sign Up Free →</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
 
-                    <div class="flex justify-end mt-2">
-    <a href="forgot-password.html" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
-</div>
+<!-- Spacer for fixed nav -->
+<div class="nav-spacer"></div>
+
+<!-- Login Form -->
+<div class="min-h-[calc(100vh-80px)] flex items-center justify-center px-4">
+    <div class="bg-white rounded-2xl shadow-xl w-full max-w-md p-8">
+        <div class="text-center mb-8">
+            <h2 class="text-2xl font-bold text-gray-800">Welcome Back</h2>
+            <p class="text-gray-500 text-sm mt-1">Login to your dropshipping account</p>
         </div>
 
+        <form id="loginForm">
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Email Address</label>
+                <input type="email" id="email" placeholder="your@email.com" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            </div>
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required class="w-full border border-gray-300 rounded-lg px-4 py-3 focus:ring-2 focus:ring-blue-500 focus:border-transparent transition">
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <label class="flex items-center">
+                    <input type="checkbox" class="w-4 h-4 text-blue-600 rounded border-gray-300">
+                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                </label>
+                <a href="forgot-password.html" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+            </div>
+            
+            <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">
+                Login →
+            </button>
+        </form>
+        
+        <p class="text-center text-sm text-gray-600 mt-6">
+            Don't have an account? 
+            <a href="register.html" class="text-blue-600 hover:underline font-medium">Sign Up Free</a>
+        </p>
     </div>
-    <script>
-        const API_URL = window.location.hostname === 'localhost' 
-            ? 'http://localhost:3000/api' 
-            : 'https://dropship-forwarder-api.onrender.com/api';
-        
-        document.getElementById('loginForm').addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const email = document.getElementById('email').value;
-            const password = document.getElementById('password').value;
-            try {
-                const response = await axios.post(`${API_URL}/auth/login`, { email, password });
-                localStorage.setItem('token', response.data.token);
-                window.location.href = 'dashboard.html';
-            } catch (error) {
-                alert(error.response?.data?.error || 'Login failed');
-            }
-        });
-        
-        if (localStorage.getItem('token')) {
-            window.location.href = 'dashboard.html';
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">© 2026 Dropship Forwarder - South African Freight Forwarding</p>
+    </div>
+</footer>
+
+<script>
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api' 
+        : 'https://dropship-forwarder-api.onrender.com/api';
+    
+    // ==================== MOBILE MENU ====================
+    
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.toggle('open');
+            if (hamburger) hamburger.classList.toggle('active');
         }
-    </script>
+    }
+    
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) {
+            menu.classList.remove('open');
+            if (hamburger) hamburger.classList.remove('active');
+        }
+    }
+    
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) { closeMobileMenu(); }
+    });
+    
+    // ==================== LOGIN ====================
+    
+    document.getElementById('loginForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        
+        const email = document.getElementById('email').value;
+        const password = document.getElementById('password').value;
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        
+        btn.disabled = true;
+        btn.innerHTML = 'Logging in...';
+        
+        try {
+            const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+            localStorage.setItem('token', response.data.token);
+            window.location.href = 'dashboard.html';
+        } catch (error) {
+            alert(error.response?.data?.error || 'Login failed. Please check your credentials.');
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    });
+    
+    // Redirect if already logged in
+    if (localStorage.getItem('token')) {
+        window.location.href = 'dashboard.html';
+    }
+</script>
+
 </body>
 </html>
