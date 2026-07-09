@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Dropship Forwarder</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/toast.js"></script>
+    <script src="/chat-support.js"></script>
+    <style>
+        .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+        .mobile-menu.open { max-height: 500px; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+        .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-spacer { height: 70px; }
+        @media (min-width: 768px) { .nav-spacer { height: 64px; } }
+        .contact-card { transition: all 0.3s ease; }
+        .contact-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Top Bar -->
+<div class="top-bar text-white text-center py-1.5 px-3 text-xs" style="background: linear-gradient(90deg, #1e40af, #7c3aed);">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-1 sm:gap-3">
+        <span>🔥 Dropship Forwarder</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <span>🚀 14-Day Free Trial</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <span class="hidden xs:inline">⚡ Ship China → SA</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up →</a>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14 sm:h-16">
+            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
+                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="portal.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+                <a href="contact.html" class="text-blue-600 font-medium text-sm">Contact</a>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            </div>
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="logout()" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
+                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-1">
+                <a href="dashboard.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
+                <a href="analytics.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
+                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="portal.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
+                <a href="affiliate.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
+                <a href="contact.html" class="block px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg transition" onclick="closeMobileMenu()">Contact</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <button onclick="logout()" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<!-- Main Content -->
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold text-gray-800">📞 Contact Us</h1>
+        <p class="text-gray-600 mt-2">We're here to help! Reach out anytime.</p>
+    </div>
+
+    <!-- Contact Grid -->
+    <div class="grid md:grid-cols-2 gap-8">
+
+        <!-- Contact Form -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 contact-card">
+            <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                <span>✉️</span> Send a Message
+            </h3>
+            <form id="contactForm">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Full Name *</label>
+                    <input type="text" id="contactName" required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Email Address *</label>
+                    <input type="email" id="contactEmail" required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                    <select id="contactSubject" class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent">
+                        <option>General Inquiry</option>
+                        <option>Order Support</option>
+                        <option>Shipping Question</option>
+                        <option>Payment Issue</option>
+                        <option>Technical Issue</option>
+                        <option>Partnership/Media</option>
+                    </select>
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Message *</label>
+                    <textarea id="contactMessage" rows="4" required class="w-full border border-gray-300 rounded-lg px-4 py-2.5 focus:ring-2 focus:ring-blue-500 focus:border-transparent"></textarea>
+                </div>
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700 transition shadow-md">
+                    Send Message →
+                </button>
+            </form>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="space-y-6">
+            <div class="bg-white rounded-2xl shadow-lg p-6 contact-card">
+                <h3 class="text-lg font-bold text-gray-800 mb-4 flex items-center gap-2">
+                    <span>📍</span> Reach Us
+                </h3>
+                <div class="space-y-4">
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl">📧</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Email</p>
+                            <a href="mailto:support@dropshipforwarder.co.za" class="text-blue-600 hover:underline">support@dropshipforwarder.co.za</a>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl">📞</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Phone</p>
+                            <p class="text-gray-600">+27 12 345 6789</p>
+                            <p class="text-xs text-gray-400">Mon-Fri, 8am-5pm SAST</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl">💬</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Live Chat</p>
+                            <p class="text-gray-600">Click the chat bubble bottom right</p>
+                            <p class="text-xs text-gray-400">Available 24/7</p>
+                        </div>
+                    </div>
+                    <div class="flex items-start gap-3">
+                        <span class="text-xl">🏢</span>
+                        <div>
+                            <p class="font-semibold text-gray-800">Office</p>
+                            <p class="text-gray-600">Pretoria, South Africa</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Quick Links -->
+            <div class="bg-white rounded-2xl shadow-lg p-6 contact-card">
+                <h3 class="text-lg font-bold text-gray-800 mb-3 flex items-center gap-2">
+                    <span>🔗</span> Quick Links
+                </h3>
+                <div class="flex flex-wrap gap-2">
+                    <a href="tracking.html" class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition">🔍 Track Order</a>
+                    <a href="portal.html" class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition">📦 Customer Portal</a>
+                    <a href="affiliate.html" class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition">🤝 Affiliate Program</a>
+                    <a href="training.html" class="bg-gray-100 text-gray-700 px-3 py-1.5 rounded-lg text-sm hover:bg-gray-200 transition">🎓 Training</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">© 2026 Dropship Forwarder - South African Freight Forwarding</p>
+    </div>
+</footer>
+
+<script>
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api' 
+        : 'https://dropship-forwarder-api.onrender.com/api';
+
+    // ==================== MOBILE MENU ====================
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) { menu.classList.toggle('open'); if (hamburger) hamburger.classList.toggle('active'); }
+    }
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) { menu.classList.remove('open'); if (hamburger) hamburger.classList.remove('active'); }
+    }
+    window.addEventListener('resize', function() { if (window.innerWidth >= 768) { closeMobileMenu(); } });
+
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+
+    // ==================== CONTACT FORM ====================
+    document.getElementById('contactForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const btn = e.target.querySelector('button[type="submit"]');
+        const originalText = btn.innerHTML;
+        btn.disabled = true;
+        btn.innerHTML = 'Sending...';
+
+        const data = {
+            name: document.getElementById('contactName').value,
+            email: document.getElementById('contactEmail').value,
+            subject: document.getElementById('contactSubject').value,
+            message: document.getElementById('contactMessage').value
+        };
+
+        try {
+            // Send to backend or email service
+            await axios.post(`${API_URL}/contact`, data);
+            toast.success('Message sent! We\'ll reply within 24 hours.');
+            e.target.reset();
+        } catch (error) {
+            toast.error('Failed to send. Please try again.');
+        } finally {
+            btn.disabled = false;
+            btn.innerHTML = originalText;
+        }
+    });
+
+    // Check auth
+    const token = localStorage.getItem('token');
+    if (!token) {
+        // Allow public view but show limited options
+        document.querySelectorAll('a[href="dashboard.html"]').forEach(el => el.style.display = 'none');
+    }
+</script>
+</body>
+</html>

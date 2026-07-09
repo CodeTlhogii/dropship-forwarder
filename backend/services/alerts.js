@@ -141,6 +141,34 @@ async function sendPasswordResetEmail(email, resetUrl) {
     }
 }
 
+
+
+
+async function sendContactEmail(name, email, subject, message) {
+    try {
+        const transporter = await getTransporter();
+        await transporter.sendMail({
+            from: `"${name}" <${email}>`,
+            to: 'support@dropshipforwarder.co.za',
+            subject: `Contact Form: ${subject}`,
+            html: `
+                <h3>New Contact Form Submission</h3>
+                <p><strong>Name:</strong> ${name}</p>
+                <p><strong>Email:</strong> ${email}</p>
+                <p><strong>Subject:</strong> ${subject}</p>
+                <p><strong>Message:</strong></p>
+                <p>${message}</p>
+            `
+        });
+        return { success: true };
+    } catch (error) {
+        console.error('Contact email error:', error);
+        return { success: false };
+    }
+}
+
+
+
 // Don't forget to export it!
 module.exports = { 
     sendTrackingEmail, 

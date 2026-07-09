@@ -17,6 +17,7 @@ const analyticsRoutes = require('./routes/analytics');
 const portalRoutes = require('./routes/portal');
 const affiliateRoutes = require('./routes/affiliate');
 const passwordResetRoutes = require('./routes/password-reset');
+const contactRoutes = require('./routes/contact');
 
 
 const app = express();
@@ -60,6 +61,7 @@ app.use('/api/analytics', analyticsRoutes);
 app.use('/api/portal', portalRoutes);
 app.use('/api/affiliate', affiliateRoutes);
 app.use('/api/password-reset', passwordResetRoutes);
+app.use('/api/contact', contactRoutes);
 
 
 

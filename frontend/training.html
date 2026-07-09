@@ -1,0 +1,375 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Training - Dropship Forwarder</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="/toast.js"></script>
+    <script src="/chat-support.js"></script>
+    <style>
+        .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+        .mobile-menu.open { max-height: 500px; }
+        .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
+        .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+        .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
+        .nav-spacer { height: 70px; }
+        @media (min-width: 768px) { .nav-spacer { height: 64px; } }
+        .step-card { transition: all 0.3s ease; }
+        .step-card:hover { transform: translateY(-4px); box-shadow: 0 20px 40px -10px rgba(0,0,0,0.1); }
+        .step-number {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+        .progress-bar { background: #e5e7eb; border-radius: 8px; overflow: hidden; height: 8px; }
+        .progress-fill { background: linear-gradient(90deg, #3b82f6, #8b5cf6); height: 100%; transition: width 0.5s ease; }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Top Bar -->
+<div class="top-bar text-white text-center py-1.5 px-3 text-xs" style="background: linear-gradient(90deg, #1e40af, #7c3aed);">
+    <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-1 sm:gap-3">
+        <span>🔥 Dropship Forwarder</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <span>🚀 14-Day Free Trial</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <span class="hidden xs:inline">⚡ Ship China → SA</span>
+        <span class="hidden sm:inline text-gray-300">|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up →</a>
+    </div>
+</div>
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md fixed top-0 left-0 w-full z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-14 sm:h-16">
+            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
+                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="portal.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+                <a href="training.html" class="text-blue-600 font-medium text-sm">Training</a>
+                <a href="contact.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Contact</a>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            </div>
+            <div class="md:hidden flex items-center gap-2">
+                <button onclick="logout()" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
+                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+                </div>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-1">
+                <a href="dashboard.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
+                <a href="analytics.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
+                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="portal.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
+                <a href="affiliate.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
+                <a href="training.html" class="block px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg transition" onclick="closeMobileMenu()">Training</a>
+                <a href="contact.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Contact</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <button onclick="logout()" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="nav-spacer"></div>
+
+<!-- Main Content -->
+<div class="max-w-5xl mx-auto px-4 py-8">
+
+    <!-- Header -->
+    <div class="text-center mb-10">
+        <h1 class="text-3xl font-bold text-gray-800">🎓 Training Program</h1>
+        <p class="text-gray-600 mt-2">Learn how to master Dropship Forwarder in 5 simple steps</p>
+    </div>
+
+    <!-- Progress -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mb-8">
+        <div class="flex justify-between items-center mb-2">
+            <span class="font-semibold text-gray-700">Your Progress</span>
+            <span id="progressText" class="text-sm text-blue-600 font-semibold">0%</span>
+        </div>
+        <div class="progress-bar">
+            <div id="progressFill" class="progress-fill" style="width: 0%;"></div>
+        </div>
+    </div>
+
+    <!-- Steps -->
+    <div class="space-y-6">
+
+        <!-- Step 1 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 step-card">
+            <div class="flex gap-4">
+                <div class="step-number">1</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">Create Your Account</h3>
+                        <button onclick="markComplete(1)" class="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition">✅ Mark Complete</button>
+                    </div>
+                    <p class="text-gray-600 mt-1">Sign up for your free 14-day trial. No credit card required.</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">📝 Registration</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">⏱️ 2 min</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 mt-3">
+                        <p class="text-sm text-gray-600">📌 <strong>Pro Tip:</strong> Use your business email for faster verification.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 2 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 step-card">
+            <div class="flex gap-4">
+                <div class="step-number">2</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">Get Your Shipping Addresses</h3>
+                        <button onclick="markComplete(2)" class="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition">✅ Mark Complete</button>
+                    </div>
+                    <p class="text-gray-600 mt-1">We provide two warehouse addresses — one in China and one in the USA.</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">🌏 China</span>
+                        <span class="bg-red-100 text-red-700 px-2 py-0.5 rounded text-xs">🇺🇸 USA</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">⏱️ 3 min</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 mt-3">
+                        <p class="text-sm text-gray-600">📌 <strong>Pro Tip:</strong> Use both addresses to source from the best suppliers worldwide.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 3 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 step-card">
+            <div class="flex gap-4">
+                <div class="step-number">3</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">Create Your First Order</h3>
+                        <button onclick="markComplete(3)" class="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition">✅ Mark Complete</button>
+                    </div>
+                    <p class="text-gray-600 mt-1">Add customer details, product info, and shipping address. We handle the rest.</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">📦 Order</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">⏱️ 5 min</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 mt-3">
+                        <p class="text-sm text-gray-600">📌 <strong>Pro Tip:</strong> Use the "DDP" option to prepay duties — your customer pays nothing extra.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 4 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 step-card">
+            <div class="flex gap-4">
+                <div class="step-number">4</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">Add Tracking & Ship</h3>
+                        <button onclick="markComplete(4)" class="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition">✅ Mark Complete</button>
+                    </div>
+                    <p class="text-gray-600 mt-1">Add tracking numbers and we'll notify your customer automatically via email.</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">🔍 Tracking</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">⏱️ 2 min</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 mt-3">
+                        <p class="text-sm text-gray-600">📌 <strong>Pro Tip:</strong> The customer portal lets your buyers track packages themselves.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Step 5 -->
+        <div class="bg-white rounded-2xl shadow-lg p-6 step-card">
+            <div class="flex gap-4">
+                <div class="step-number">5</div>
+                <div class="flex-1">
+                    <div class="flex justify-between items-start">
+                        <h3 class="text-xl font-bold text-gray-800">Scale with Analytics & Affiliates</h3>
+                        <button onclick="markComplete(5)" class="bg-green-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-green-600 transition">✅ Mark Complete</button>
+                    </div>
+                    <p class="text-gray-600 mt-1">Use analytics to track performance and earn commissions through our affiliate program.</p>
+                    <div class="flex flex-wrap gap-2 mt-3">
+                        <span class="bg-blue-100 text-blue-700 px-2 py-0.5 rounded text-xs">📊 Analytics</span>
+                        <span class="bg-purple-100 text-purple-700 px-2 py-0.5 rounded text-xs">🤝 Affiliate</span>
+                        <span class="bg-green-100 text-green-700 px-2 py-0.5 rounded text-xs">⏱️ 3 min</span>
+                    </div>
+                    <div class="bg-gray-50 rounded-lg p-3 mt-3">
+                        <p class="text-sm text-gray-600">📌 <strong>Pro Tip:</strong> Share your affiliate link in Facebook groups to earn passive income.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Shipping Address Suite -->
+    <div class="bg-white rounded-2xl shadow-lg p-6 mt-8 step-card">
+        <h3 class="text-xl font-bold text-gray-800 mb-4">🏭 Your Shipping Addresses</h3>
+        <div class="grid md:grid-cols-2 gap-6">
+            <div class="bg-blue-50 rounded-xl p-4 border border-blue-200">
+                <h4 class="font-bold text-gray-800 flex items-center gap-2">
+                    <span>🌏</span> China Warehouse
+                </h4>
+                <div class="bg-white rounded-lg p-4 mt-3 font-mono text-sm border border-gray-200">
+                    <p><strong>Name:</strong> Dropship Forwarder CN</p>
+                    <p><strong>Address:</strong> Room 301, Building A, No. 1288</p>
+                    <p><strong>Street:</strong> Huaihai Road, Huangpu District</p>
+                    <p><strong>City:</strong> Shanghai</p>
+                    <p><strong>Province:</strong> Shanghai</p>
+                    <p><strong>Postal Code:</strong> 200021</p>
+                    <p><strong>Country:</strong> China</p>
+                    <p><strong>Phone:</strong> +86 21 1234 5678</p>
+                </div>
+                <button onclick="copyAddress(1)" class="mt-3 bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition w-full">📋 Copy China Address</button>
+            </div>
+            <div class="bg-red-50 rounded-xl p-4 border border-red-200">
+                <h4 class="font-bold text-gray-800 flex items-center gap-2">
+                    <span>🇺🇸</span> USA Warehouse
+                </h4>
+                <div class="bg-white rounded-lg p-4 mt-3 font-mono text-sm border border-gray-200">
+                    <p><strong>Name:</strong> Dropship Forwarder US</p>
+                    <p><strong>Address:</strong> 401 E Broadway Blvd</p>
+                    <p><strong>Street:</strong> Suite 101</p>
+                    <p><strong>City:</strong> Los Angeles</p>
+                    <p><strong>State:</strong> California</p>
+                    <p><strong>Postal Code:</strong> 90013</p>
+                    <p><strong>Country:</strong> USA</p>
+                    <p><strong>Phone:</strong> +1 310-555-0199</p>
+                </div>
+                <button onclick="copyAddress(2)" class="mt-3 bg-red-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-700 transition w-full">📋 Copy USA Address</button>
+            </div>
+        </div>
+        <p class="text-xs text-gray-400 mt-4">⚠️ Use these addresses when ordering from suppliers. We'll receive, consolidate, and forward your packages.</p>
+    </div>
+
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 py-4 mt-8">
+    <div class="max-w-7xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">© 2026 Dropship Forwarder - South African Freight Forwarding</p>
+    </div>
+</footer>
+
+<script>
+    const API_URL = window.location.hostname === 'localhost' 
+        ? 'http://localhost:3000/api' 
+        : 'https://dropship-forwarder-api.onrender.com/api';
+
+    // ==================== MOBILE MENU ====================
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) { menu.classList.toggle('open'); if (hamburger) hamburger.classList.toggle('active'); }
+    }
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        if (menu) { menu.classList.remove('open'); if (hamburger) hamburger.classList.remove('active'); }
+    }
+    window.addEventListener('resize', function() { if (window.innerWidth >= 768) { closeMobileMenu(); } });
+
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+
+    // ==================== TRAINING PROGRESS ====================
+    let completedSteps = new Set();
+
+    function loadProgress() {
+        const saved = localStorage.getItem('trainingProgress');
+        if (saved) {
+            completedSteps = new Set(JSON.parse(saved));
+            updateProgress();
+        }
+    }
+
+    function saveProgress() {
+        localStorage.setItem('trainingProgress', JSON.stringify([...completedSteps]));
+    }
+
+    function markComplete(step) {
+        if (completedSteps.has(step)) {
+            completedSteps.delete(step);
+        } else {
+            completedSteps.add(step);
+        }
+        saveProgress();
+        updateProgress();
+        const btn = event.target;
+        btn.textContent = completedSteps.has(step) ? '✅ Completed' : '✅ Mark Complete';
+        toast[completedSteps.has(step) ? 'success' : 'info'](
+            completedSteps.has(step) ? 'Step completed! 🎉' : 'Step unmarked.'
+        );
+    }
+
+    function updateProgress() {
+        const total = 5;
+        const done = completedSteps.size;
+        const percent = Math.round((done / total) * 100);
+        document.getElementById('progressFill').style.width = percent + '%';
+        document.getElementById('progressText').textContent = percent + '%';
+    }
+
+    // ==================== COPY ADDRESSES ====================
+    function copyAddress(type) {
+        let text = '';
+        if (type === 1) {
+            text = `Dropship Forwarder CN\nRoom 301, Building A, No. 1288\nHuaihai Road, Huangpu District\nShanghai, Shanghai 200021\nChina\nPhone: +86 21 1234 5678`;
+        } else {
+            text = `Dropship Forwarder US\n401 E Broadway Blvd, Suite 101\nLos Angeles, CA 90013\nUSA\nPhone: +1 310-555-0199`;
+        }
+        navigator.clipboard.writeText(text).then(() => {
+            toast.success('Address copied to clipboard!');
+        }).catch(() => {
+            // Fallback
+            const ta = document.createElement('textarea');
+            ta.value = text;
+            document.body.appendChild(ta);
+            ta.select();
+            document.execCommand('copy');
+            ta.remove();
+            toast.success('Address copied!');
+        });
+    }
+
+    // ==================== INIT ====================
+    loadProgress();
+
+    // Check auth
+    const token = localStorage.getItem('token');
+    if (!token) {
+        document.querySelectorAll('a[href="dashboard.html"]').forEach(el => el.style.display = 'none');
+    }
+</script>
+</body>
+</html>
