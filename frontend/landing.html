@@ -63,41 +63,84 @@
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
+        .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
+        .mobile-menu.open { max-height: 500px; }
+        .hamburger { cursor: pointer; }
+        .hamburger div { transition: all 0.3s ease; }
+        .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
+        .hamburger.active div:nth-child(2) { opacity: 0; }
+        .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
     </style>
 </head>
 <body class="bg-white">
 
+<!-- TOP MARKETING BAR -->
+<div class="top-bar text-white text-center py-2 px-4 text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-2">
+        <span class="font-bold">🚀 14-DAY FREE TRIAL</span>
+        <span>|</span>
+        <span>⚡ Ship from China & USA to SA in 10-15 days</span>
+        <span>|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up Now →</a>
+    </div>
+</div>
+
 <!-- Navigation -->
-<nav class="bg-white shadow-md fixed w-full z-50 top-0">
-    <div class="max-w-7xl mx-auto px-4">
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between items-center h-16">
-            <div class="flex items-center space-x-8">
-                <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                    Dropship Forwarder
-                </a>
-                <div class="hidden md:flex space-x-6">
-                    <a href="#features" class="text-gray-700 hover:text-blue-600">Features</a>
-                    <a href="#pricing" class="text-gray-700 hover:text-blue-600">Pricing</a>
-                    <a href="#how-it-works" class="text-gray-700 hover:text-blue-600">How It Works</a>
-                    <a href="#faq" class="text-gray-700 hover:text-blue-600">FAQ</a>
-                    <a href="tracking.html" class="text-gray-700 hover:text-blue-600">Track</a>
+            <!-- Logo -->
+            <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+                Dropship Forwarder
+            </a>
+            
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="text-gray-700 hover:text-blue-600 transition">Features</a>
+                <a href="#pricing" class="text-gray-700 hover:text-blue-600 transition">Pricing</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-blue-600 transition">How It Works</a>
+                <a href="#faq" class="text-gray-700 hover:text-blue-600 transition">FAQ</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition">Track</a>
+                <a href="login.html" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                <a href="register.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">Sign Up Free →</a>
+            </div>
+            
+            <!-- Mobile Hamburger -->
+            <div class="md:hidden flex items-center gap-3">
+                <a href="login.html" class="px-3 py-1.5 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
                 </div>
             </div>
-            <div class="flex space-x-3">
-                <a href="login.html" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50">Login</a>
-                <a href="register.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 shadow-lg">Sign Up Free →</a>
+        </div>
+        
+        <!-- Mobile Menu -->
+        <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
+            <div class="py-3 space-y-2">
+                <a href="#features" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Features</a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Pricing</a>
+                <a href="#how-it-works" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">How It Works</a>
+                <a href="#faq" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">FAQ</a>
+                <a href="tracking.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track Package</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 flex flex-col gap-2">
+                    <a href="login.html" class="block text-center px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                    <a href="register.html" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">Sign Up Free →</a>
+                </div>
             </div>
         </div>
     </div>
 </nav>
 
 <!-- Hero Section -->
-<section class="pt-32 pb-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+<section class="pt-16 pb-20 bg-gradient-to-br from-blue-50 to-indigo-100">
     <div class="max-w-7xl mx-auto px-4 text-center">
         <div class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
             🚀 Trusted by 500+ South African Dropshippers
         </div>
-        <h1 class="text-5xl md:text-6xl font-extrabold text-gray-900 mb-6">
+        <h1 class="text-4xl md:text-6xl font-extrabold text-gray-900 mb-6">
             Ship from China & USA to 
             <span class="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">South Africa</span>
             in 10-15 Days
@@ -125,20 +168,20 @@
             <p class="text-xl text-gray-600">Stop worrying about logistics. Focus on growing your store.</p>
         </div>
         <div class="grid md:grid-cols-3 gap-8">
-            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+            <div class="bg-white rounded-xl p-6 card-hover">
                 <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mb-4 text-2xl">📦</div>
-                <h3 class="text-xl font-bold mb-2" itemprop="name">Consolidation Service</h3>
-                <p class="text-gray-600" itemprop="description">Combine multiple orders from different suppliers into one package. Save up to 60% on shipping.</p>
+                <h3 class="text-xl font-bold mb-2">Consolidation Service</h3>
+                <p class="text-gray-600">Combine multiple orders from different suppliers into one package. Save up to 60% on shipping.</p>
             </div>
-            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+            <div class="bg-white rounded-xl p-6 card-hover">
                 <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mb-4 text-2xl">🛃</div>
-                <h3 class="text-xl font-bold mb-2" itemprop="name">DDP Customs Clearance</h3>
-                <p class="text-gray-600" itemprop="description">Delivered Duty Paid - Your customers pay nothing extra. We handle all SARS paperwork.</p>
+                <h3 class="text-xl font-bold mb-2">DDP Customs Clearance</h3>
+                <p class="text-gray-600">Delivered Duty Paid - Your customers pay nothing extra. We handle all SARS paperwork.</p>
             </div>
-            <div class="bg-white rounded-xl p-6 card-hover" itemscope itemtype="https://schema.org/Service">
+            <div class="bg-white rounded-xl p-6 card-hover">
                 <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mb-4 text-2xl">🔍</div>
-                <h3 class="text-xl font-bold mb-2" itemprop="name">Real-Time Tracking</h3>
-                <p class="text-gray-600" itemprop="description">Branded tracking page for your customers. WhatsApp and email updates automatically.</p>
+                <h3 class="text-xl font-bold mb-2">Real-Time Tracking</h3>
+                <p class="text-gray-600">Branded tracking page for your customers. WhatsApp and email updates automatically.</p>
             </div>
             <div class="bg-white rounded-xl p-6 card-hover">
                 <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mb-4 text-2xl">📄</div>
@@ -166,30 +209,22 @@
             <h2 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
             <p class="text-xl text-gray-600">Everything you need to know about shipping with us</p>
         </div>
-        <div class="space-y-4" itemscope itemtype="https://schema.org/FAQPage">
-            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <h3 class="font-bold text-lg mb-2" itemprop="name">How long does shipping from China to South Africa take?</h3>
-                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div itemprop="text">Standard shipping takes 10-15 business days from China to South Africa. Express shipping available for 5-7 days.</div>
-                </div>
+        <div class="space-y-4">
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-2">How long does shipping from China to South Africa take?</h3>
+                <p class="text-gray-600">Standard shipping takes 10-15 business days from China to South Africa. Express shipping available for 5-7 days.</p>
             </div>
-            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <h3 class="font-bold text-lg mb-2" itemprop="name">What is DDP and why do I need it?</h3>
-                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div itemprop="text">DDP (Delivered Duty Paid) means all customs duties and taxes are prepaid. Your customer pays nothing on delivery — higher conversion rates for you.</div>
-                </div>
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-2">What is DDP and why do I need it?</h3>
+                <p class="text-gray-600">DDP (Delivered Duty Paid) means all customs duties and taxes are prepaid. Your customer pays nothing on delivery — higher conversion rates for you.</p>
             </div>
-            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <h3 class="font-bold text-lg mb-2" itemprop="name">Do you ship from the USA as well?</h3>
-                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div itemprop="text">Yes! We have warehouse facilities in both China and the USA. Shipping from USA to South Africa takes 7-12 days.</div>
-                </div>
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-2">Do you ship from the USA as well?</h3>
+                <p class="text-gray-600">Yes! We have warehouse facilities in both China and the USA. Shipping from USA to South Africa takes 7-12 days.</p>
             </div>
-            <div class="border rounded-lg p-4" itemscope itemprop="mainEntity" itemtype="https://schema.org/Question">
-                <h3 class="font-bold text-lg mb-2" itemprop="name">What payment methods do you accept?</h3>
-                <div class="text-gray-600" itemscope itemprop="acceptedAnswer" itemtype="https://schema.org/Answer">
-                    <div itemprop="text">We accept EFT / wire transfer, credit card via PayFast, and wallet deposits. Monthly subscription available.</div>
-                </div>
+            <div class="border rounded-lg p-4">
+                <h3 class="font-bold text-lg mb-2">What payment methods do you accept?</h3>
+                <p class="text-gray-600">We accept EFT / wire transfer, credit card via PayFast, and wallet deposits. Monthly subscription available.</p>
             </div>
         </div>
     </div>
@@ -291,20 +326,41 @@
 </footer>
 
 <script>
+    // Mobile Menu Toggle
+    function toggleMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        menu.classList.toggle('open');
+        hamburger.classList.toggle('active');
+    }
+    
+    function closeMobileMenu() {
+        const menu = document.getElementById('mobileMenu');
+        const hamburger = document.querySelector('.hamburger');
+        menu.classList.remove('open');
+        hamburger.classList.remove('active');
+    }
+    
+    // Auto-close menu on resize to desktop
+    window.addEventListener('resize', function() {
+        if (window.innerWidth >= 768) {
+            closeMobileMenu();
+        }
+    });
+    
+    // Check if user is logged in
     const token = localStorage.getItem('token');
     if (token) {
-        // Update navigation for logged-in users
-        const loginBtn = document.querySelector('a[href="login.html"]');
-        const signupBtn = document.querySelector('a[href="register.html"]');
-        
-        if (loginBtn) {
-            loginBtn.textContent = 'Dashboard';
-            loginBtn.href = 'dashboard.html';
-        }
-        if (signupBtn) {
-            signupBtn.textContent = 'Dashboard';
-            signupBtn.href = 'dashboard.html';
-        }
+        const loginBtns = document.querySelectorAll('a[href="login.html"]');
+        loginBtns.forEach(btn => {
+            btn.textContent = 'Dashboard';
+            btn.href = 'dashboard.html';
+        });
+        const signupBtns = document.querySelectorAll('a[href="register.html"]');
+        signupBtns.forEach(btn => {
+            btn.textContent = 'Dashboard';
+            btn.href = 'dashboard.html';
+        });
     }
 </script>
 </body>
