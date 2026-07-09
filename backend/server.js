@@ -16,6 +16,8 @@ const wireRoutes = require('./routes/wire');
 const analyticsRoutes = require('./routes/analytics');
 const portalRoutes = require('./routes/portal');
 const affiliateRoutes = require('./routes/affiliate');
+const passwordResetRoutes = require('./routes/password-reset');
+
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -57,7 +59,7 @@ app.use('/api/wire', wireRoutes);
 app.use('/api/analytics', analyticsRoutes);
 app.use('/api/portal', portalRoutes);
 app.use('/api/affiliate', affiliateRoutes);
-
+app.use('/api/password-reset', passwordResetRoutes);
 
 
 

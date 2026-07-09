@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Dropship Forwarder</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dropship Forwarder</a>
+                <a href="register.html" class="text-blue-600 hover:underline">Sign Up</a>
+            </div>
+        </div>
+    </nav>
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Welcome Back</h2>
+            <form id="loginForm">
+                <input type="email" id="email" placeholder="Email" required class="w-full border rounded-lg px-4 py-3 mb-4">
+                <input type="password" id="password" placeholder="Password" required class="w-full border rounded-lg px-4 py-3 mb-4">
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">Login</button>
+            </form>
+            <p class="text-center text-sm text-gray-600 mt-4">Don't have an account? <a href="register.html" class="text-blue-600 hover:underline">Sign Up</a></p>
+        </div>
+        <div class="flex justify-end mt-2">
+    <a href="forgot-password.html" class="text-sm text-blue-600 hover:underline">Forgot Password?</a>
+</div>
+    </div>
+    <script>
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : 'https://dropship-forwarder-api.onrender.com/api';
+        
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            try {
+                const response = await axios.post(`${API_URL}/auth/login`, { email, password });
+                localStorage.setItem('token', response.data.token);
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert(error.response?.data?.error || 'Login failed');
+            }
+        });
+        
+        if (localStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Register - Dropship Forwarder</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100">
+    <nav class="bg-white shadow-md">
+        <div class="max-w-7xl mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">Dropship Forwarder</a>
+                <a href="login.html" class="text-blue-600 hover:underline">Login</a>
+            </div>
+        </div>
+    </nav>
+    <div class="min-h-screen flex items-center justify-center">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md p-8">
+            <h2 class="text-2xl font-bold text-center mb-6">Start Your Free Trial</h2>
+            <p class="text-center text-sm text-gray-600 mb-6">14-day free trial • No credit card required</p>
+            <form id="registerForm">
+                <input type="email" id="email" placeholder="Email" required class="w-full border rounded-lg px-4 py-3 mb-3">
+                <input type="text" id="company" placeholder="Company Name" class="w-full border rounded-lg px-4 py-3 mb-3">
+                <input type="tel" id="phone" placeholder="Phone" class="w-full border rounded-lg px-4 py-3 mb-3">
+                <input type="password" id="password" placeholder="Password (min 6 chars)" required class="w-full border rounded-lg px-4 py-3 mb-4">
+                <button type="submit" class="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold hover:bg-blue-700">Start Free Trial →</button>
+            </form>
+            <p class="text-center text-sm text-gray-600 mt-4">Already have an account? <a href="login.html" class="text-blue-600 hover:underline">Login</a></p>
+        </div>
+    </div>
+    <script>
+        const API_URL = window.location.hostname === 'localhost' 
+            ? 'http://localhost:3000/api' 
+            : 'https://dropship-forwarder-api.onrender.com/api';
+        
+        // Capture referral code
+        const urlParams = new URLSearchParams(window.location.search);
+        const refCode = urlParams.get('ref');
+        if (refCode) sessionStorage.setItem('referralCode', refCode);
+
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('email').value;
+            const company_name = document.getElementById('company').value;
+            const phone = document.getElementById('phone').value;
+            const password = document.getElementById('password').value;
+            const ref = sessionStorage.getItem('referralCode') || '';
+            
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters');
+                return;
+            }
+            
+            try {
+                let url = `${API_URL}/auth/register`;
+                if (ref) url += `?ref=${ref}`;
+                
+                const response = await axios.post(url, { email, password, company_name, phone });
+                localStorage.setItem('token', response.data.token);
+                sessionStorage.removeItem('referralCode');
+                window.location.href = 'dashboard.html';
+            } catch (error) {
+                alert(error.response?.data?.error || 'Registration failed');
+            }
+        });
+        
+        if (localStorage.getItem('token')) {
+            window.location.href = 'dashboard.html';
+        }
+    </script>
+</body>
+</html>
