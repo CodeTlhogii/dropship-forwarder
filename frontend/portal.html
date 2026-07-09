@@ -55,14 +55,24 @@
             </a>
             
             <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <a href="dashboard.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
-                <a href="analytics.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
-                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-                <a href="portal.html" class="text-blue-600 font-medium text-sm">Portal</a>
-                <a href="affiliate.html" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
-                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
-            </div>
+        <!-- Desktop Menu -->
+<div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+    <!-- Public links (shown when logged out) -->
+    <a href="/" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Home</a>
+    <a href="tracking.html" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+    <a href="login.html" data-auth="false" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm">Login</a>
+    <a href="register.html" data-auth="false" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg text-sm">Sign Up Free →</a>
+    
+    <!-- Private links (shown when logged in) -->
+    <a href="dashboard.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
+    <a href="analytics.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+    <a href="tracking.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+    <a href="portal.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+    <a href="affiliate.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+    <a href="training.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Training</a>
+    <a href="contact.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Contact</a>
+    <button onclick="logout()" data-auth="true" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+</div>
             
             <!-- Mobile -->
             <div class="md:hidden flex items-center gap-2">
