@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analytics - Dropship Forwarder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        .card-hover { transition: transform 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-8">
+                <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Dropship Forwarder
+                </a>
+            <div class="hidden md:flex space-x-4">
+    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+    <a href="analytics.html" class="text-blue-600 font-medium">Analytics</a>
+    <a href="tracking.html" class="text-gray-600 hover:text-blue-600">Track</a>
+    <a href="portal.html" class="text-gray-600 hover:text-blue-600">Portal</a>
+    <a href="affiliate.html" class="text-gray-600 hover:text-blue-600">Affiliate</a>
+</div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="navUserEmail" class="text-gray-600 text-sm hidden md:inline"></span>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-7xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-8">📊 Analytics Dashboard</h1>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm">Total Orders</div>
+            <div id="totalOrders" class="text-3xl font-bold text-blue-600">-</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm">Revenue This Month</div>
+            <div id="revenue" class="text-3xl font-bold text-green-600">-</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm">Avg Delivery Time</div>
+            <div id="avgDelivery" class="text-3xl font-bold text-purple-600">-</div>
+            <div class="text-xs text-gray-500">days</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm">Avg Shipping Cost</div>
+            <div id="avgShipping" class="text-3xl font-bold text-orange-600">-</div>
+        </div>
+    </div>
+    
+    <!-- Charts -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold mb-4">Monthly Orders</h3>
+            <canvas id="ordersChart" height="200"></canvas>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6">
+            <h3 class="text-lg font-bold mb-4">Orders by Status</h3>
+            <canvas id="statusChart" height="200"></canvas>
+        </div>
+    </div>
+    
+    <!-- Top Products -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-bold mb-4">🏆 Top Selling Products</h3>
+        <div id="topProducts" class="space-y-3">
+            <div class="text-center py-4 text-gray-500">Loading...</div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    let ordersChart, statusChart;
+    
+    async function loadAnalytics() {
+        try {
+            const userRes = await axios.get(`${API_URL}/auth/me`);
+            document.getElementById('navUserEmail').textContent = userRes.data.email;
+            
+            const response = await axios.get(`${API_URL}/analytics/dashboard`);
+            const data = response.data;
+            const shippingRes = await axios.get(`${API_URL}/analytics/shipping`);
+            
+            document.getElementById('totalOrders').textContent = data.total_orders;
+            document.getElementById('revenue').textContent = `R ${data.revenue_this_month.toFixed(2)}`;
+            document.getElementById('avgDelivery').textContent = data.avg_delivery_days;
+            document.getElementById('avgShipping').textContent = `R ${shippingRes.data.avg_shipping_cost.toFixed(2)}`;
+            
+            // Monthly orders chart
+            const months = data.monthly_orders.map(m => m.month).reverse();
+            const counts = data.monthly_orders.map(m => m.count).reverse();
+            
+            if (ordersChart) ordersChart.destroy();
+            ordersChart = new Chart(document.getElementById('ordersChart'), {
+                type: 'line',
+                data: { labels: months, datasets: [{ label: 'Orders', data: counts, borderColor: '#3b82f6', tension: 0.3 }] },
+                options: { responsive: true, maintainAspectRatio: true }
+            });
+            
+            // Status chart
+            const statusLabels = data.orders_by_status.map(s => s.status);
+            const statusCounts = data.orders_by_status.map(s => s.count);
+            
+            if (statusChart) statusChart.destroy();
+            statusChart = new Chart(document.getElementById('statusChart'), {
+                type: 'doughnut',
+                data: { labels: statusLabels, datasets: [{ data: statusCounts, backgroundColor: ['#3b82f6', '#f59e0b', '#10b981', '#8b5cf6', '#ef4444'] }] }
+            });
+            
+            // Top products
+            const productsDiv = document.getElementById('topProducts');
+            if (data.top_products.length === 0) {
+                productsDiv.innerHTML = '<div class="text-center py-4 text-gray-500">No products yet</div>';
+            } else {
+                productsDiv.innerHTML = data.top_products.map((p, i) => `
+                    <div class="flex justify-between items-center border-b py-3">
+                        <div class="flex items-center gap-3">
+                            <span class="text-2xl">${i === 0 ? '🥇' : i === 1 ? '🥈' : i === 2 ? '🥉' : '📦'}</span>
+                            <div>
+                                <p class="font-semibold">${p.product_name}</p>
+                                <p class="text-sm text-gray-500">${p.count} orders</p>
+                            </div>
+                        </div>
+                        <div class="font-bold text-green-600">R${parseFloat(p.revenue).toFixed(2)}</div>
+                    </div>
+                `).join('');
+            }
+            
+        } catch (error) {
+            console.error('Load analytics error:', error);
+            if (error.response?.status === 401) logout();
+        }
+    }
+    
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    }
+    
+    loadAnalytics();
+</script>
+</body>
+</html>

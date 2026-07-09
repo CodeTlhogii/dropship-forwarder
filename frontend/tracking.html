@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Package - Dropship Forwarder</title>
+       <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .timeline-dot {
+            transition: all 0.3s ease;
+        }
+        .timeline-dot:hover {
+            transform: scale(1.2);
+        }
+        .tracking-card {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-6">
+                <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Dropship Forwarder
+                </a>
+                <a href="dashboard.html" id="navDashboard" class="hidden text-gray-600 hover:text-blue-600">Dashboard</a>
+                <a href="tracking.html" class="text-blue-600 font-medium">Track Package</a>
+            </div>
+        <div class="hidden md:flex space-x-4">
+    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+    <a href="analytics.html" class="text-gray-600 hover:text-blue-600">Analytics</a>
+    <a href="tracking.html" class="text-blue-600 font-medium">Track</a>
+    <a href="portal.html" class="text-gray-600 hover:text-blue-600">Portal</a>
+    <a href="affiliate.html" class="text-gray-600 hover:text-blue-600">Affiliate</a>
+</div>
+        </div>
+    </div>
+</nav>
+
+<script>
+    const token = localStorage.getItem('token');
+    if (token) {
+        document.getElementById('navLogin')?.classList.add('hidden');
+        document.getElementById('navDashboard')?.classList.remove('hidden');
+        document.getElementById('navLogout')?.classList.remove('hidden');
+    }
+    
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'landing.html';
+    }
+</script>
+
+<!-- Main Content -->
+<div class="max-w-4xl mx-auto px-4 py-8">
+    
+    <!-- Header -->
+    <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-gray-800">📦 Track Your Package</h1>
+        <p class="text-gray-600 mt-2">Enter your tracking number to see real-time updates</p>
+    </div>
+
+    <!-- Search Card -->
+    <div class="bg-white rounded-2xl shadow-xl overflow-hidden mb-8">
+        <div class="bg-gradient-to-r from-blue-600 to-purple-600 px-6 py-4">
+            <div class="flex items-center gap-2">
+                <span class="text-2xl">🔍</span>
+                <h2 class="text-white font-bold text-lg">Tracking Information</h2>
+            </div>
+        </div>
+        <div class="p-6">
+            <div class="flex flex-col md:flex-row gap-3">
+                <input type="text" 
+                       id="trackingInput" 
+                       placeholder="Enter tracking number (e.g., DSF2024001)" 
+                       class="flex-1 border border-gray-300 rounded-lg px-4 py-3 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-lg">
+                <button onclick="trackPackage()" 
+                        class="bg-blue-600 text-white px-8 py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold flex items-center justify-center gap-2">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                    Track
+                </button>
+            </div>
+            <p class="text-gray-500 text-xs mt-3">Enter your tracking number from your shipping confirmation email</p>
+        </div>
+    </div>
+
+    <!-- Loading Indicator -->
+    <div id="loading" class="hidden text-center py-12">
+        <div class="inline-block animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <p class="text-gray-500 mt-4">Fetching tracking information...</p>
+    </div>
+
+    <!-- Error Message -->
+    <div id="error" class="hidden bg-red-50 border-l-4 border-red-500 rounded-lg p-4 mb-6">
+        <div class="flex items-center">
+            <div class="flex-shrink-0">
+                <svg class="h-5 w-5 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                </svg>
+            </div>
+            <div class="ml-3">
+                <p id="errorMessage" class="text-red-700"></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results -->
+    <div id="result" class="hidden space-y-6">
+        
+        <!-- Order Info Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden tracking-card">
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📋</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Shipment Details</h3>
+                </div>
+            </div>
+            <div class="p-6">
+                <div id="orderInfo" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Status Badge Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden tracking-card">
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📍</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Current Status</h3>
+                </div>
+            </div>
+            <div class="p-6">
+                <div id="statusBadge" class="inline-block px-4 py-2 rounded-full text-sm font-semibold">
+                    <!-- Populated by JavaScript -->
+                </div>
+                <div id="estimatedDelivery" class="mt-3 text-sm text-gray-600"></div>
+            </div>
+        </div>
+
+        <!-- Timeline Card -->
+        <div class="bg-white rounded-2xl shadow-xl overflow-hidden tracking-card">
+            <div class="border-b border-gray-200 bg-gray-50 px-6 py-4">
+                <div class="flex items-center gap-2">
+                    <span class="text-xl">📊</span>
+                    <h3 class="font-bold text-gray-800 text-lg">Tracking Timeline</h3>
+                </div>
+                <p class="text-gray-500 text-sm">Package journey updates</p>
+            </div>
+            <div class="p-6">
+                <div id="timeline" class="relative">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Help Section -->
+        <div class="bg-yellow-50 border border-yellow-200 rounded-2xl p-6 text-center">
+            <p class="text-yellow-800 text-sm">
+                ❓ Need help? Contact us at <strong>support@dropshipforwarder.co.za</strong> or call +27 12 345 6789
+            </p>
+        </div>
+    </div>
+</div>
+
+<!-- Footer -->
+<footer class="bg-gray-800 mt-12 py-6">
+    <div class="max-w-4xl mx-auto px-4 text-center">
+        <p class="text-gray-400 text-sm">© 2025 Dropship Forwarder - South African Freight Forwarding</p>
+    </div>
+</footer>
+
+<script>
+    const API_URL = 'http://localhost:3000/api';
+    
+    // Check URL for tracking param
+    const urlParams = new URLSearchParams(window.location.search);
+    const trackingParam = urlParams.get('tracking');
+    if (trackingParam) {
+        document.getElementById('trackingInput').value = trackingParam;
+        trackPackage();
+    }
+    
+    // Enter key support
+    document.getElementById('trackingInput').addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+            trackPackage();
+        }
+    });
+    
+    async function trackPackage() {
+        const trackingNumber = document.getElementById('trackingInput').value.trim();
+        if (!trackingNumber) {
+            showError('Please enter a tracking number');
+            return;
+        }
+        
+        // Hide previous results, show loading
+        document.getElementById('result').classList.add('hidden');
+        document.getElementById('error').classList.add('hidden');
+        document.getElementById('loading').classList.remove('hidden');
+        
+        try {
+            const response = await axios.get(`${API_URL}/tracking/public/${trackingNumber}`);
+            const data = response.data;
+            
+            displayOrderInfo(data.order);
+            displayStatusBadge(data.order.status);
+            displayEstimatedDelivery(data.order);
+            displayTimeline(data.events);
+            
+            document.getElementById('loading').classList.add('hidden');
+            document.getElementById('result').classList.remove('hidden');
+            
+        } catch (error) {
+            document.getElementById('loading').classList.add('hidden');
+            const errorMsg = error.response?.data?.error || 'Tracking number not found. Please check and try again.';
+            showError(errorMsg);
+        }
+    }
+    
+    function displayOrderInfo(order) {
+        const orderInfo = document.getElementById('orderInfo');
+        
+        const orderDate = new Date(order.created_at).toLocaleDateString('en-ZA', {
+            year: 'numeric',
+            month: 'long',
+            day: 'numeric'
+        });
+        
+        orderInfo.innerHTML = `
+            <div class="space-y-2">
+                <div>
+                    <span class="text-gray-500 text-sm">Tracking Number:</span>
+                    <p class="font-mono font-bold text-gray-800">${order.tracking_number || 'Not assigned yet'}</p>
+                </div>
+                <div>
+                    <span class="text-gray-500 text-sm">Carrier:</span>
+                    <p class="font-semibold text-gray-800">${order.carrier || 'Pending assignment'}</p>
+                </div>
+                <div>
+                    <span class="text-gray-500 text-sm">Product:</span>
+                    <p class="font-semibold text-gray-800">${escapeHtml(order.product_name)}</p>
+                </div>
+            </div>
+            <div class="space-y-2">
+                <div>
+                    <span class="text-gray-500 text-sm">Customer Name:</span>
+                    <p class="font-semibold text-gray-800">${escapeHtml(order.customer_name)}</p>
+                </div>
+                <div>
+                    <span class="text-gray-500 text-sm">Shipping Address:</span>
+                    <p class="text-gray-800">${escapeHtml(order.shipping_address)}</p>
+                </div>
+                <div>
+                    <span class="text-gray-500 text-sm">Order Date:</span>
+                    <p class="text-gray-800">${orderDate}</p>
+                </div>
+            </div>
+        `;
+    }
+    
+    function displayStatusBadge(status) {
+        const statusBadge = document.getElementById('statusBadge');
+        const statusConfig = {
+            'pending': { color: 'bg-gray-200 text-gray-800', text: '⏳ Pending Processing' },
+            'received_cn': { color: 'bg-yellow-200 text-yellow-800', text: '📦 Received at China Warehouse' },
+            'consolidated': { color: 'bg-blue-200 text-blue-800', text: '🔗 Consolidated with other items' },
+            'customs_clearance': { color: 'bg-purple-200 text-purple-800', text: '🛃 Customs Clearance in Progress' },
+            'in_transit': { color: 'bg-indigo-200 text-indigo-800', text: '✈️ In Transit to South Africa' },
+            'delivered': { color: 'bg-green-200 text-green-800', text: '✅ Delivered to Customer' },
+            'exception': { color: 'bg-red-200 text-red-800', text: '⚠️ Exception - Contact Support' }
+        };
+        
+        const config = statusConfig[status] || statusConfig['pending'];
+        statusBadge.className = `inline-block px-4 py-2 rounded-full text-sm font-semibold ${config.color}`;
+        statusBadge.textContent = config.text;
+    }
+    
+    async function displayEstimatedDelivery(order) {
+        const etaDiv = document.getElementById('estimatedDelivery');
+        
+        try {
+            const response = await axios.get(`${API_URL}/tracking/eta/${order.tracking_number}`);
+            const eta = response.data;
+            
+            if (eta.status === 'delivered') {
+                etaDiv.innerHTML = `✅ Delivered on ${eta.estimated_delivery}`;
+            } else if (eta.days_remaining === 0) {
+                etaDiv.innerHTML = `📅 Expected delivery today!`;
+            } else {
+                etaDiv.innerHTML = `📅 Estimated delivery: ${eta.estimated_delivery} (${eta.days_remaining} days remaining)`;
+            }
+        } catch (error) {
+            etaDiv.innerHTML = '';
+        }
+    }
+    
+    function displayTimeline(events) {
+        const timeline = document.getElementById('timeline');
+        
+        if (!events || events.length === 0) {
+            timeline.innerHTML = `
+                <div class="text-center py-8">
+                    <svg class="w-16 h-16 text-gray-300 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                    </svg>
+                    <p class="text-gray-500">No tracking events yet. Package is being processed.</p>
+                    <p class="text-gray-400 text-sm mt-2">Check back in 24-48 hours for updates.</p>
+                </div>
+            `;
+            return;
+        }
+        
+        // Reverse for chronological order (oldest first)
+        const chronologicalEvents = [...events].reverse();
+        
+        timeline.innerHTML = chronologicalEvents.map((event, index) => {
+            const eventDate = new Date(event.event_time);
+            const formattedDate = eventDate.toLocaleDateString('en-ZA', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+            const formattedTime = eventDate.toLocaleTimeString('en-ZA', {
+                hour: '2-digit',
+                minute: '2-digit'
+            });
+            
+            const isLast = index === chronologicalEvents.length - 1;
+            const statusIcon = getStatusIcon(event.status);
+            const statusText = formatStatusText(event.status);
+            
+            return `
+                <div class="relative flex gap-4 pb-8 ${!isLast ? 'border-l-2 border-gray-200 ml-3' : ''}">
+                    <div class="absolute -left-3 bg-white rounded-full p-1">
+                        <div class="timeline-dot w-4 h-4 rounded-full ${getTimelineColor(event.status)}"></div>
+                    </div>
+                    <div class="ml-8 flex-1">
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-lg">${statusIcon}</span>
+                            <span class="font-semibold text-gray-800">${statusText}</span>
+                        </div>
+                        <p class="text-gray-600 text-sm">${escapeHtml(event.description || event.location || 'Processing')}</p>
+                        <p class="text-gray-400 text-xs mt-1">${formattedDate} at ${formattedTime}</p>
+                        ${event.location ? `<p class="text-gray-500 text-xs mt-1">📍 ${escapeHtml(event.location)}</p>` : ''}
+                    </div>
+                </div>
+            `;
+        }).join('');
+    }
+    
+    function getStatusIcon(status) {
+        const icons = {
+            'pending': '📋',
+            'received_cn': '📦',
+            'consolidated': '🔗',
+            'customs_clearance': '🛃',
+            'in_transit': '✈️',
+            'delivered': '🎉',
+            'exception': '⚠️'
+        };
+        return icons[status] || '📍';
+    }
+    
+    function getTimelineColor(status) {
+        const colors = {
+            'pending': 'bg-gray-400',
+            'received_cn': 'bg-yellow-500',
+            'consolidated': 'bg-blue-500',
+            'customs_clearance': 'bg-purple-500',
+            'in_transit': 'bg-indigo-500',
+            'delivered': 'bg-green-500',
+            'exception': 'bg-red-500'
+        };
+        return colors[status] || 'bg-gray-400';
+    }
+    
+    function formatStatusText(status) {
+        const statusMap = {
+            'pending': 'Order Received',
+            'received_cn': 'Received at China Warehouse',
+            'consolidated': 'Consolidated with Other Items',
+            'customs_clearance': 'Customs Clearance in Progress',
+            'in_transit': 'In Transit to South Africa',
+            'delivered': 'Delivered to Customer',
+            'exception': 'Delivery Exception'
+        };
+        return statusMap[status] || status;
+    }
+    
+    function showError(message) {
+        const errorDiv = document.getElementById('error');
+        const errorMessage = document.getElementById('errorMessage');
+        errorMessage.textContent = message;
+        errorDiv.classList.remove('hidden');
+        
+        setTimeout(() => {
+            errorDiv.classList.add('hidden');
+        }, 5000);
+    }
+    
+    function escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+</script>
+</body>
+</html>

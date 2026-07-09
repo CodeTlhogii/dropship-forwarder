@@ -1,0 +1,7 @@
+# robots.txt for Dropship Forwarder
+User-agent: *
+Allow: /
+Disallow: /dashboard.html
+Disallow: /api/
+Disallow: /admin/
+Sitemap: https://dropshipforwarder.co.za/sitemap.xml

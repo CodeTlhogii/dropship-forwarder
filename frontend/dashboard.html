@@ -1,0 +1,644 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - Dropship Forwarder</title>
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><defs><linearGradient id='g' x1='0%25' y1='0%25' x2='100%25' y2='100%25'><stop offset='0%25' stop-color='%233b82f6'/><stop offset='100%25' stop-color='%238b5cf6'/></linearGradient></defs><rect width='100' height='100' rx='20' fill='url(%23g)'/><text x='50' y='68' text-anchor='middle' font-size='52' fill='white'>📦</text></svg>">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <style>
+        .status-badge { transition: all 0.2s ease; }
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card-hover:hover { transform: translateY(-2px); box-shadow: 0 10px 25px -5px rgba(0,0,0,0.1); }
+        .modal { transition: opacity 0.3s ease; }
+        .trial-banner { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+    </style>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navigation Bar -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-8">
+                <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Dropship Forwarder
+                </a>
+                <div class="hidden md:flex space-x-4">
+                    <a href="dashboard.html" class="text-blue-600 font-medium">Dashboard</a>
+                    <a href="analytics.html" class="text-gray-600 hover:text-blue-600">Analytics</a>
+                    <a href="tracking.html" class="text-gray-600 hover:text-blue-600">Track</a>
+                    <a href="portal.html" class="text-gray-600 hover:text-blue-600">Portal</a>
+                    <a href="affiliate.html" class="text-gray-600 hover:text-blue-600">Affiliate</a>
+                    <button onclick="showBulkUpload()" class="text-gray-600 hover:text-blue-600">Bulk Upload</button>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="navUserEmail" class="text-gray-600 text-sm hidden md:inline"></span>
+                <span id="navWalletBalance" class="bg-green-100 text-green-700 px-3 py-1 rounded-full text-sm font-semibold hidden md:inline">R0</span>
+                <span id="trialBadge" class="bg-orange-100 text-orange-700 px-3 py-1 rounded-full text-sm font-semibold hidden">Trial</span>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">
+                    Logout
+                </button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<!-- Trial Banner -->
+<div id="trialBanner" class="trial-banner text-white px-4 py-2 text-center hidden">
+    <span id="trialMessage"></span>
+</div>
+
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm mb-1">Total Orders</div>
+            <div id="totalOrders" class="text-3xl font-bold text-gray-800">0</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm mb-1">In Transit</div>
+            <div id="inTransit" class="text-3xl font-bold text-blue-600">0</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm mb-1">Delivered</div>
+            <div id="delivered" class="text-3xl font-bold text-green-600">0</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 card-hover">
+            <div class="text-gray-500 text-sm mb-1">Wallet Balance</div>
+            <div id="walletBalance" class="text-3xl font-bold text-purple-600">R0</div>
+        </div>
+    </div>
+
+    <!-- Deposit Money Card -->
+    <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-lg shadow-lg p-6 mb-8 border border-green-200">
+        <div class="flex justify-between items-center flex-wrap gap-4">
+            <div>
+                <div class="flex items-center gap-2">
+                    <span class="text-2xl">💰</span>
+                    <h3 class="text-lg font-bold text-gray-800">Add Funds via EFT / Wire Transfer</h3>
+                </div>
+                <p class="text-gray-600 text-sm mt-1">Deposit money to your wallet using bank transfer</p>
+                <p class="text-green-600 text-xs mt-1">✓ Secure • 24-hour verification • Instant credit after approval</p>
+            </div>
+            <button onclick="showWireTransferModal()" class="bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition shadow-md">
+                Deposit via EFT →
+            </button>
+        </div>
+    </div>
+
+    <!-- Bulk Upload Section -->
+    <div class="bg-white rounded-lg shadow mb-8">
+        <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center">
+            <h2 class="text-xl font-bold text-gray-800">📤 Bulk Upload Orders</h2>
+            <button onclick="showBulkUpload()" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm hover:bg-blue-700 transition">
+                Upload CSV →
+            </button>
+        </div>
+        <div class="p-6">
+            <p class="text-gray-600 text-sm mb-2">Upload multiple orders at once using a CSV file.</p>
+            <p class="text-gray-500 text-xs">Download the template below to get started.</p>
+        </div>
+    </div>
+
+    <!-- Deposit History Section with Collapse -->
+    <div class="bg-white rounded-lg shadow mb-8">
+        <div class="border-b border-gray-200 px-6 py-4 flex justify-between items-center cursor-pointer" onclick="toggleDepositHistory()">
+            <div class="flex items-center gap-2">
+                <span id="collapseIcon" class="text-xl">▼</span>
+                <h2 class="text-xl font-bold text-gray-800">📜 Deposit History</h2>
+                <span id="historyCount" class="text-sm text-gray-500"></span>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="event.stopPropagation(); refreshDepositHistory()" class="bg-blue-500 text-white px-3 py-1 rounded-lg text-sm hover:bg-blue-600 transition">
+                    🔄 Refresh
+                </button>
+            </div>
+        </div>
+        <div id="depositHistoryContainer" class="p-6">
+            <div id="depositHistory" class="space-y-2">
+                <div class="text-center py-4 text-gray-500">Loading deposit history...</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Create Order Form -->
+    <div class="bg-white rounded-lg shadow mb-8">
+        <div class="border-b border-gray-200 px-6 py-4">
+            <h2 class="text-xl font-bold text-gray-800">📦 Create New Order</h2>
+        </div>
+        <div class="p-6">
+            <form id="orderForm" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Name *</label>
+                    <input type="text" id="customerName" required class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Email</label>
+                    <input type="email" id="customerEmail" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Customer Phone</label>
+                    <input type="tel" id="customerPhone" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Shipping Address *</label>
+                    <input type="text" id="shippingAddress" required class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">City</label>
+                    <input type="text" id="shippingCity" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Postal Code</label>
+                    <input type="text" id="shippingPostal" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Name *</label>
+                    <input type="text" id="productName" required class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product SKU</label>
+                    <input type="text" id="productSku" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Product Value (ZAR) *</label>
+                    <input type="number" id="productValue" required step="0.01" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Weight (kg) *</label>
+                    <input type="number" id="productWeight" required step="0.1" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">HS Code (optional)</label>
+                    <input type="text" id="hsCode" placeholder="e.g., 8517.12" class="w-full border border-gray-300 rounded-lg px-4 py-2">
+                </div>
+                <div class="flex items-center space-x-2">
+                    <input type="checkbox" id="ddpEnabled" class="w-4 h-4 text-blue-600">
+                    <label class="text-sm font-medium text-gray-700">Enable DDP (Prepay duties)</label>
+                </div>
+                <div class="md:col-span-2">
+                    <button type="submit" class="w-full bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-blue-700 transition">
+                        Create Order →
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Orders List -->
+    <div class="bg-white rounded-lg shadow">
+        <div class="border-b border-gray-200 px-6 py-4">
+            <h2 class="text-xl font-bold text-gray-800">📋 Your Orders</h2>
+        </div>
+        <div class="p-6">
+            <div id="ordersList" class="space-y-4">
+                <div class="text-center py-8 text-gray-500">Loading orders...</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Wire Transfer Modal -->
+<div id="wireModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center overflow-y-auto modal">
+    <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full mx-4 my-8">
+        <div class="border-b px-6 py-4 flex justify-between items-center bg-gray-50 rounded-t-lg">
+            <h3 class="text-xl font-bold text-gray-800">💰 EFT / Wire Transfer Deposit</h3>
+            <button onclick="closeWireModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div class="p-6">
+            <div class="mb-6">
+                <h4 class="font-bold text-gray-800 mb-3">Bank Details</h4>
+                <div class="bg-gray-100 rounded-lg p-4" id="bankDetails">
+                    <div class="grid grid-cols-2 gap-2 text-sm">
+                        <div class="font-semibold">Bank:</div><div id="bankName">FNB</div>
+                        <div class="font-semibold">Account Name:</div><div id="accountName">Dropship Forwarder</div>
+                        <div class="font-semibold">Account Number:</div><div id="accountNumber">62830987654</div>
+                        <div class="font-semibold">Branch Code:</div><div id="branchCode">250655</div>
+                        <div class="font-semibold">Reference:</div><div id="referenceFormat">YOUR_NAME</div>
+                    </div>
+                </div>
+            </div>
+            <form id="proofForm">
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Amount (R) *</label>
+                    <input type="number" id="popAmount" step="0.01" required class="w-full border rounded-lg px-4 py-2">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Reference Used</label>
+                    <input type="text" id="popReference" class="w-full border rounded-lg px-4 py-2">
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Your Bank</label>
+                    <select id="popBankName" class="w-full border rounded-lg px-4 py-2">
+                        <option>Capitec</option><option>FNB</option><option>Standard Bank</option>
+                        <option>Absa</option><option>Nedbank</option><option>TymeBank</option>
+                    </select>
+                </div>
+                <div class="mb-3">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Account Holder</label>
+                    <input type="text" id="popAccountHolder" class="w-full border rounded-lg px-4 py-2">
+                </div>
+                <div class="mb-4">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">Proof of Payment *</label>
+                    <input type="file" id="popFile" accept="image/*,.pdf" required class="w-full border rounded-lg px-4 py-2">
+                </div>
+                <button type="submit" class="w-full bg-green-600 text-white px-4 py-3 rounded-lg font-semibold hover:bg-green-700">
+                    Submit Proof →
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Bulk Upload Modal -->
+<div id="bulkModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 z-50 flex items-center justify-center modal">
+    <div class="bg-white rounded-lg shadow-xl max-w-md w-full mx-4">
+        <div class="border-b px-6 py-4 flex justify-between items-center">
+            <h3 class="text-xl font-bold">Bulk Upload Orders</h3>
+            <button onclick="closeBulkModal()" class="text-gray-500 hover:text-gray-700 text-2xl">&times;</button>
+        </div>
+        <div class="p-6">
+            <div class="bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                <p class="text-sm text-blue-800">📋 CSV Format Required:</p>
+                <p class="text-xs text-blue-600 mt-1">customer_name, customer_email, customer_phone, shipping_address, shipping_city, shipping_postal, product_name, product_sku, product_value, product_weight_kg, product_hs_code</p>
+            </div>
+            <p class="text-sm text-gray-600 mb-3">
+                <a href="#" onclick="downloadTemplate()" class="text-blue-600 hover:underline">📥 Download CSV Template</a>
+            </p>
+            <input type="file" id="csvFile" accept=".csv" class="w-full border border-gray-300 rounded-lg px-4 py-2 mb-4">
+            <button onclick="uploadCSV()" class="w-full bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition">
+                Upload & Process Orders
+            </button>
+            <p class="text-xs text-gray-500 mt-3 text-center">Supports up to 500 orders per upload</p>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    // ==================== DEPOSIT HISTORY COLLAPSE FUNCTIONS ====================
+    
+    let historyCollapsed = false;
+    
+    function toggleDepositHistory() {
+        const container = document.getElementById('depositHistoryContainer');
+        const icon = document.getElementById('collapseIcon');
+        
+        if (historyCollapsed) {
+            container.style.display = 'block';
+            icon.textContent = '▼';
+            historyCollapsed = false;
+        } else {
+            container.style.display = 'none';
+            icon.textContent = '▶';
+            historyCollapsed = true;
+        }
+    }
+    
+    function refreshDepositHistory() {
+        loadDepositHistory();
+        alert('Deposit history refreshed!');
+    }
+    
+    // ==================== LOAD TRIAL STATUS ====================
+    
+    async function loadTrialStatus() {
+        try {
+            const response = await axios.get(`${API_URL}/auth/trial-status`);
+            const trial = response.data;
+            
+            if (trial.is_trial) {
+                document.getElementById('trialBadge').classList.remove('hidden');
+                document.getElementById('trialBanner').classList.remove('hidden');
+                document.getElementById('trialMessage').innerHTML = `🎉 You're on a 14-day free trial! ${trial.trial_days_left} days remaining. <a href="pricing.html" class="underline">Upgrade now →</a>`;
+            } else if (trial.trial_used) {
+                document.getElementById('trialBanner').classList.remove('hidden');
+                document.getElementById('trialMessage').innerHTML = `⚠️ Your free trial has ended. <a href="pricing.html" class="underline">Subscribe now</a> to continue using Dropship Forwarder.`;
+            }
+        } catch (error) {
+            console.error('Trial status error:', error);
+        }
+    }
+    
+    // ==================== LOAD DASHBOARD ====================
+    
+    async function loadDashboard() {
+        try {
+            const userRes = await axios.get(`${API_URL}/auth/me`);
+            document.getElementById('navUserEmail').textContent = userRes.data.email;
+            await updateWalletBalance();
+            await loadDepositHistory();
+            await loadTrialStatus();
+            
+            const ordersRes = await axios.get(`${API_URL}/orders`);
+            const orders = ordersRes.data;
+            document.getElementById('totalOrders').textContent = orders.length;
+            document.getElementById('inTransit').textContent = orders.filter(o => ['received_cn', 'consolidated', 'customs_clearance', 'in_transit'].includes(o.status)).length;
+            document.getElementById('delivered').textContent = orders.filter(o => o.status === 'delivered').length;
+            renderOrders(orders);
+        } catch (error) {
+            console.error('Load dashboard error:', error);
+            if (error.response?.status === 401) logout();
+        }
+    }
+    
+    // ==================== WALLET FUNCTIONS ====================
+    
+    async function updateWalletBalance() {
+        try {
+            const response = await axios.get(`${API_URL}/wire/wallet`);
+            const balance = response.data.balance || 0;
+            document.getElementById('walletBalance').textContent = `R ${balance.toFixed(2)}`;
+            document.getElementById('navWalletBalance').textContent = `R ${balance.toFixed(2)}`;
+        } catch (error) {
+            console.error('Failed to get wallet balance:', error);
+        }
+    }
+    
+    // ==================== DEPOSIT HISTORY ====================
+    
+    async function loadDepositHistory() {
+        try {
+            const response = await axios.get(`${API_URL}/wire/history`);
+            const history = response.data;
+            const historyDiv = document.getElementById('depositHistory');
+            const historyCount = document.getElementById('historyCount');
+            
+            if (!history || history.length === 0) {
+                historyDiv.innerHTML = '<div class="text-center py-4 text-gray-500">No deposit history yet</div>';
+                if (historyCount) historyCount.textContent = '(0)';
+                return;
+            }
+            
+            if (historyCount) historyCount.textContent = `(${history.length})`;
+            
+            historyDiv.innerHTML = history.map(item => `
+                <div class="border-b border-gray-100 py-3 flex justify-between items-center hover:bg-gray-50 transition px-2 rounded">
+                    <div>
+                        <p class="font-semibold text-gray-800">R${parseFloat(item.amount).toFixed(2)}</p>
+                        <p class="text-xs text-gray-500">${new Date(item.created_at).toLocaleDateString()} ${new Date(item.created_at).toLocaleTimeString()}</p>
+                        ${item.reference_number ? `<p class="text-xs text-gray-400 mt-1">Ref: ${item.reference_number}</p>` : ''}
+                    </div>
+                    <div>
+                        <span class="px-2 py-1 rounded-full text-xs font-semibold ${getDepositStatusColor(item.status)}">
+                            ${getDepositStatusText(item.status)}
+                        </span>
+                        ${item.status === 'pending' ? '<p class="text-xs text-yellow-600 mt-1">Awaiting verification</p>' : ''}
+                        ${item.status === 'completed' ? `<p class="text-xs text-green-600 mt-1">${item.approved_at ? 'Approved: ' + new Date(item.approved_at).toLocaleDateString() : ''}</p>` : ''}
+                    </div>
+                </div>
+            `).join('');
+        } catch (error) {
+            console.error('Load deposit history error:', error);
+            const historyDiv = document.getElementById('depositHistory');
+            if (historyDiv) {
+                historyDiv.innerHTML = '<div class="text-center py-4 text-gray-500">Error loading deposit history</div>';
+            }
+        }
+    }
+    
+    function getDepositStatusColor(status) {
+        const colors = { 'pending': 'bg-yellow-100 text-yellow-800', 'completed': 'bg-green-100 text-green-800', 'failed': 'bg-red-100 text-red-800' };
+        return colors[status] || 'bg-gray-100';
+    }
+    
+    function getDepositStatusText(status) {
+        const texts = { 'pending': 'Pending', 'completed': 'Completed', 'failed': 'Failed' };
+        return texts[status] || status;
+    }
+    
+    // ==================== ORDER RENDERING ====================
+    
+    function renderOrders(orders) {
+        const ordersList = document.getElementById('ordersList');
+        if (!orders || orders.length === 0) {
+            ordersList.innerHTML = '<div class="text-center py-8 text-gray-500">No orders yet</div>';
+            return;
+        }
+        
+        ordersList.innerHTML = orders.map(order => `
+            <div class="border rounded-lg p-4 card-hover">
+                <div class="flex justify-between items-start flex-wrap gap-4">
+                    <div class="flex-1">
+                        <div class="flex items-center gap-2 mb-2 flex-wrap">
+                            <h3 class="font-bold text-lg">${escapeHtml(order.product_name)}</h3>
+                            <span class="status-badge px-2 py-1 rounded-full text-xs font-semibold ${getStatusColor(order.status)}">
+                                ${formatStatus(order.status)}
+                            </span>
+                        </div>
+                        <p class="text-sm text-gray-600">${escapeHtml(order.customer_name)} • R${order.product_value}</p>
+                        <p class="text-xs text-gray-500">${escapeHtml(order.shipping_address)}</p>
+                        ${order.tracking_number ? `<p class="text-sm text-blue-600 mt-1">🔍 Tracking: <span class="font-mono">${order.tracking_number}</span> via ${order.carrier || 'Carrier'}</p>` : '<p class="text-sm text-gray-400 mt-1">⏳ No tracking number yet</p>'}
+                    </div>
+                    <div class="flex flex-wrap gap-2">
+                        ${!order.tracking_number ? `
+                            <button onclick="showAddTracking(${order.id})" class="bg-green-600 text-white px-3 py-1 rounded text-sm hover:bg-green-700">
+                                📦 Add Tracking
+                            </button>
+                        ` : `
+                            <button onclick="window.open('tracking.html?tracking=${order.tracking_number}', '_blank')" class="bg-blue-600 text-white px-3 py-1 rounded text-sm hover:bg-blue-700">
+                                🔍 Track
+                            </button>
+                        `}
+                        <button onclick="generateCustomsPDF(${order.id})" class="bg-purple-600 text-white px-3 py-1 rounded text-sm hover:bg-purple-700">
+                            📄 PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `).join('');
+    }
+    
+    function getStatusColor(status) {
+        const colors = {
+            'pending': 'bg-gray-200 text-gray-800',
+            'received_cn': 'bg-yellow-200 text-yellow-800',
+            'consolidated': 'bg-blue-200 text-blue-800',
+            'customs_clearance': 'bg-purple-200 text-purple-800',
+            'in_transit': 'bg-indigo-200 text-indigo-800',
+            'delivered': 'bg-green-200 text-green-800',
+            'exception': 'bg-red-200 text-red-800'
+        };
+        return colors[status] || 'bg-gray-200 text-gray-800';
+    }
+    
+    function formatStatus(status) {
+        const statusMap = {
+            'pending': 'Pending',
+            'received_cn': 'Received in China',
+            'consolidated': 'Consolidated',
+            'customs_clearance': 'Customs Clearance',
+            'in_transit': 'In Transit',
+            'delivered': 'Delivered',
+            'exception': 'Exception'
+        };
+        return statusMap[status] || status;
+    }
+    
+    function escapeHtml(text) { if (!text) return ''; const div = document.createElement('div'); div.textContent = text; return div.innerHTML; }
+    
+    // ==================== ADD TRACKING ====================
+    
+    async function showAddTracking(orderId) {
+        const trackingNum = prompt('Enter tracking number:');
+        if (!trackingNum) return;
+        const carrier = prompt('Carrier (DHL/FedEx):', 'DHL');
+        try {
+            await axios.post(`${API_URL}/tracking/update-tracking`, { order_id: orderId, tracking_number: trackingNum, carrier });
+            alert(`Tracking ${trackingNum} added!`);
+            loadDashboard();
+        } catch (error) { alert('Failed to add tracking'); }
+    }
+    
+    // ==================== CUSTOMS PDF ====================
+    
+    async function generateCustomsPDF(orderId) {
+        try {
+            const response = await axios.post(`${API_URL}/customs/generate-pdf`, { order_id: orderId });
+            const win = window.open(); win.document.write(response.data.declaration_html || response.data.pdf_html); win.document.close();
+            alert('PDF generated!');
+        } catch (error) { alert('PDF generation failed'); }
+    }
+    
+    // ==================== WIRE TRANSFER ====================
+    
+    function showWireTransferModal() { document.getElementById('wireModal').classList.remove('hidden'); loadBankDetails(); }
+    function closeWireModal() { document.getElementById('wireModal').classList.add('hidden'); }
+    
+    async function loadBankDetails() {
+        try {
+            const response = await axios.get(`${API_URL}/wire/bank-details`);
+            const d = response.data;
+            document.getElementById('bankName').innerHTML = `<span class="font-semibold">${d.bank_name}</span>`;
+            document.getElementById('accountName').innerHTML = `<span class="font-semibold">${d.account_name}</span>`;
+            document.getElementById('accountNumber').innerHTML = `<span class="font-mono font-bold">${d.account_number}</span>`;
+            document.getElementById('branchCode').innerHTML = d.branch_code;
+            document.getElementById('referenceFormat').innerHTML = `<span class="font-mono bg-yellow-100 px-1">${d.reference_format}</span>`;
+        } catch (error) { console.error('Load bank details error:', error); }
+    }
+    
+    document.getElementById('proofForm')?.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const amount = document.getElementById('popAmount').value;
+        const file = document.getElementById('popFile').files[0];
+        if (!amount || amount < 5) { alert('Minimum R5'); return; }
+        if (!file) { alert('Please upload proof'); return; }
+        
+        const formData = new FormData();
+        formData.append('amount', amount);
+        formData.append('reference_number', document.getElementById('popReference').value);
+        formData.append('bank_name', document.getElementById('popBankName').value);
+        formData.append('account_holder', document.getElementById('popAccountHolder').value);
+        formData.append('proof_file', file);
+        
+        try {
+            await axios.post(`${API_URL}/wire/submit-proof`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            alert('Proof submitted! We\'ll verify within 24 hours.');
+            closeWireModal();
+            loadDepositHistory();
+        } catch (error) { alert(error.response?.data?.error || 'Submission failed'); }
+    });
+    
+    // ==================== BULK UPLOAD ====================
+    
+    function showBulkUpload() { document.getElementById('bulkModal').classList.remove('hidden'); }
+    function closeBulkModal() { document.getElementById('bulkModal').classList.add('hidden'); document.getElementById('csvFile').value = ''; }
+    
+    function downloadTemplate() {
+        const template = `customer_name,customer_email,customer_phone,shipping_address,shipping_city,shipping_postal,product_name,product_sku,product_value,product_weight_kg,product_hs_code
+John Doe,john@email.com,0712345678,15 Main St,Cape Town,8001,Wireless Headphones,HP-100,599,0.5,8517.12
+Jane Smith,jane@email.com,0823456789,42 Beach Rd,Durban,4001,Bluetooth Speaker,BS-200,850,0.8,8518.22`;
+        const blob = new Blob([template], { type: 'text/csv' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'orders_template.csv';
+        a.click();
+        URL.revokeObjectURL(url);
+    }
+    
+    async function uploadCSV() {
+        const fileInput = document.getElementById('csvFile');
+        const file = fileInput.files[0];
+        if (!file) { alert('Please select a CSV file'); return; }
+        if (!file.name.endsWith('.csv')) { alert('Please upload a valid CSV file'); return; }
+        
+        const formData = new FormData();
+        formData.append('csv', file);
+        const uploadBtn = event.target;
+        const originalText = uploadBtn.innerHTML;
+        uploadBtn.innerHTML = 'Processing...';
+        uploadBtn.disabled = true;
+        
+        try {
+            const response = await axios.post(`${API_URL}/upload/bulk-orders`, formData, { headers: { 'Content-Type': 'multipart/form-data' } });
+            alert(`✅ ${response.data.success} orders uploaded successfully!`);
+            if (response.data.failed > 0) alert(`⚠️ ${response.data.failed} orders failed`);
+            closeBulkModal();
+            loadDashboard();
+        } catch (error) { alert('Upload failed: ' + (error.response?.data?.error || error.message)); }
+        finally { uploadBtn.innerHTML = originalText; uploadBtn.disabled = false; }
+    }
+    
+    // ==================== CREATE ORDER ====================
+    
+    document.getElementById('orderForm').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const orderData = {
+            customer_name: document.getElementById('customerName').value,
+            customer_email: document.getElementById('customerEmail').value,
+            customer_phone: document.getElementById('customerPhone').value,
+            shipping_address: document.getElementById('shippingAddress').value,
+            shipping_city: document.getElementById('shippingCity').value,
+            shipping_postal: document.getElementById('shippingPostal').value,
+            product_name: document.getElementById('productName').value,
+            product_sku: document.getElementById('productSku').value,
+            product_value: parseFloat(document.getElementById('productValue').value),
+            product_weight_kg: parseFloat(document.getElementById('productWeight').value),
+            product_hs_code: document.getElementById('hsCode').value,
+            ddp_enabled: document.getElementById('ddpEnabled').checked
+        };
+        
+        if (!orderData.customer_name || !orderData.shipping_address || !orderData.product_name || !orderData.product_value || !orderData.product_weight_kg) {
+            alert('Please fill in all required fields');
+            return;
+        }
+        
+        const submitBtn = e.target.querySelector('button[type="submit"]');
+        const originalText = submitBtn.innerHTML;
+        submitBtn.innerHTML = 'Creating...';
+        submitBtn.disabled = true;
+        
+        try {
+            await axios.post(`${API_URL}/orders`, orderData);
+            alert('Order created successfully!');
+            e.target.reset();
+            loadDashboard();
+        } catch (error) { alert('Failed to create order'); }
+        finally { submitBtn.innerHTML = originalText; submitBtn.disabled = false; }
+    });
+    
+    // ==================== LOGOUT ====================
+    
+    function logout() { localStorage.removeItem('token'); window.location.href = 'index.html'; }
+    
+    // ==================== INITIAL LOAD ====================
+    
+    loadDashboard();
+</script>
+</body>
+</html>

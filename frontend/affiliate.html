@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Affiliate Program - Dropship Forwarder</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+</head>
+<body class="bg-gray-100">
+
+<!-- Navigation -->
+<nav class="bg-white shadow-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4">
+        <div class="flex justify-between items-center h-16">
+            <div class="flex items-center space-x-8">
+                <a href="landing.html" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                    Dropship Forwarder
+                </a>
+                <div class="hidden md:flex space-x-4">
+                    <a href="dashboard.html" class="text-gray-600 hover:text-blue-600">Dashboard</a>
+                    <a href="analytics.html" class="text-gray-600 hover:text-blue-600">Analytics</a>
+                    <a href="tracking.html" class="text-gray-600 hover:text-blue-600">Track</a>
+                    <a href="portal.html" class="text-gray-600 hover:text-blue-600">Portal</a>
+                    <a href="affiliate.html" class="text-blue-600 font-medium">Affiliate</a>
+                </div>
+            </div>
+            <div class="flex items-center space-x-4">
+                <span id="navUserEmail" class="text-gray-600 text-sm hidden md:inline"></span>
+                <button onclick="logout()" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600">Logout</button>
+            </div>
+        </div>
+    </div>
+</nav>
+
+<div class="max-w-4xl mx-auto px-4 py-8">
+    <h1 class="text-3xl font-bold text-gray-800 mb-2">🤝 Affiliate Program</h1>
+    <p class="text-gray-600 mb-8">Earn 10% commission on every referral that subscribes</p>
+    
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+            <div class="text-3xl mb-2">💰</div>
+            <div class="text-2xl font-bold text-green-600" id="totalEarnings">R0</div>
+            <div class="text-sm text-gray-500">Total Earnings</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+            <div class="text-3xl mb-2">🔗</div>
+            <div class="text-2xl font-bold text-blue-600" id="totalClicks">0</div>
+            <div class="text-sm text-gray-500">Total Clicks</div>
+        </div>
+        <div class="bg-white rounded-lg shadow p-6 text-center">
+            <div class="text-3xl mb-2">👥</div>
+            <div class="text-2xl font-bold text-purple-600" id="totalSignups">0</div>
+            <div class="text-sm text-gray-500">Total Signups</div>
+        </div>
+    </div>
+    
+    <!-- Referral Link Card -->
+    <div class="bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg shadow-lg p-6 mb-8 text-white">
+        <h3 class="text-xl font-bold mb-2">Your Referral Link</h3>
+        <p class="text-blue-100 text-sm mb-3">Share this link with potential dropshippers</p>
+        <div class="flex flex-col sm:flex-row gap-3">
+            <input type="text" id="referralLink" readonly value="Loading..." class="flex-1 bg-white text-gray-800 rounded-lg px-4 py-2 text-sm">
+            <button onclick="copyReferralLink()" class="bg-white text-blue-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition">
+                📋 Copy Link
+            </button>
+        </div>
+        <p class="text-blue-100 text-xs mt-3">You earn 10% commission on every subscription from your referrals</p>
+    </div>
+    
+    <!-- How It Works -->
+    <div class="bg-white rounded-lg shadow p-6">
+        <h3 class="text-lg font-bold mb-4">💰 How It Works</h3>
+        <div class="space-y-3">
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">1</div>
+                <div><p class="font-semibold">Share Your Link</p><p class="text-sm text-gray-500">Share your unique referral link with other dropshippers</p></div>
+            </div>
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">2</div>
+                <div><p class="font-semibold">They Sign Up</p><p class="text-sm text-gray-500">When they register using your link, you get credited</p></div>
+            </div>
+            <div class="flex items-start gap-3">
+                <div class="w-8 h-8 bg-blue-100 rounded-full flex items-center justify-center text-blue-600 font-bold">3</div>
+                <div><p class="font-semibold">Earn Commission</p><p class="text-sm text-gray-500">Get 10% of their subscription payments</p></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    const API_URL = 'http://localhost:3000/api';
+    const token = localStorage.getItem('token');
+    
+    if (!token) {
+        window.location.href = 'index.html';
+    }
+    
+    axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+    
+    async function loadAffiliateProfile() {
+        try {
+            // Get user info
+            const userRes = await axios.get(`${API_URL}/auth/me`);
+            document.getElementById('navUserEmail').textContent = userRes.data.email;
+            
+            // Get affiliate profile
+            const response = await axios.get(`${API_URL}/affiliate/profile`);
+            const data = response.data;
+            
+            // Update stats
+            document.getElementById('totalEarnings').textContent = `R ${(data.total_earnings || 0).toFixed(2)}`;
+            document.getElementById('totalClicks').textContent = data.total_clicks || 0;
+            document.getElementById('totalSignups').textContent = data.total_signups || 0;
+            
+            // Update referral link
+            const linkInput = document.getElementById('referralLink');
+            if (data.referral_link) {
+                linkInput.value = data.referral_link;
+            } else if (data.affiliate_code) {
+                linkInput.value = `http://localhost:8080/index.html?ref=${data.affiliate_code}`;
+            } else {
+                linkInput.value = 'Error loading referral link';
+            }
+            
+        } catch (error) {
+            console.error('Load affiliate error:', error);
+            document.getElementById('referralLink').value = 'Error loading. Please refresh.';
+            
+            if (error.response?.status === 401) {
+                logout();
+            }
+        }
+    }
+    
+    function copyReferralLink() {
+        const linkInput = document.getElementById('referralLink');
+        linkInput.select();
+        document.execCommand('copy');
+        alert('✅ Referral link copied to clipboard!\n\nShare this link with potential dropshippers.');
+    }
+    
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = 'index.html';
+    }
+    
+    // Load everything
+    loadAffiliateProfile();
+</script>
+</body>
+</html>
