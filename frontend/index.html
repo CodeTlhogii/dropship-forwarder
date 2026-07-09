@@ -55,11 +55,11 @@
         "description": "Freight forwarding platform for South African dropshippers shipping from China and USA."
     }
     </script>
-    <!-- Chat Support -->
-<script src="/chat-support.js"></script>
-
-<!-- Toast Notifications -->
-<script src="/toast.js"></script>
+    
+    <!-- Toast & Chat -->
+    <script src="/toast.js"></script>
+    <script src="/chat-support.js"></script>
+    
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -75,12 +75,14 @@
         .hamburger.active div:nth-child(2) { opacity: 0; }
         .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
         .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
+        [data-auth="true"] { display: none; }
+        .logged-in [data-auth="true"] { display: inline-block; }
+        .logged-in [data-auth="false"] { display: none; }
     </style>
 </head>
 <body class="bg-white">
 
-<!-- TOP MARKETING BAR -->
-<!-- TOP BAR - Uniform Across All Pages -->
+<!-- TOP BAR -->
 <div class="top-bar text-white text-center py-1.5 px-3 text-xs" style="background: linear-gradient(90deg, #1e40af, #7c3aed);">
     <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-1 sm:gap-3">
         <span>🔥 Dropship Forwarder</span>
@@ -92,10 +94,6 @@
         <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up →</a>
     </div>
 </div>
-<style>
-    .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); font-family: 'Inter', sans-serif; }
-    @media (max-width: 480px) { .top-bar .hidden\:xs\:inline { display: none; } }
-</style>
 
 <!-- Navigation -->
 <nav class="bg-white shadow-md sticky top-0 z-50">
@@ -106,29 +104,33 @@
                 Dropship Forwarder
             </a>
             
-         <!-- Desktop Menu -->
-<div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-    <!-- Public links (shown when logged out) -->
-    <a href="/" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Home</a>
-    <a href="tracking.html" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-    <a href="login.html" data-auth="false" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm">Login</a>
-    <a href="register.html" data-auth="false" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg text-sm">Sign Up Free →</a>
-    
-    <!-- Private links (shown when logged in) -->
-    <a href="dashboard.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
-    <a href="analytics.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
-    <a href="tracking.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-    <a href="portal.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
-    <a href="affiliate.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
-    <a href="training.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Training</a>
-    <a href="contact.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Contact</a>
-    <button onclick="logout()" data-auth="true" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
-</div>
+            <!-- Desktop Menu -->
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <!-- Public links (shown when logged out) -->
+                <a href="#features" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Features</a>
+                <a href="#pricing" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Pricing</a>
+                <a href="#how-it-works" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">How It Works</a>
+                <a href="#faq" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">FAQ</a>
+                <a href="tracking.html" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="login.html" data-auth="false" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm">Login</a>
+                <a href="register.html" data-auth="false" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg text-sm">Sign Up Free →</a>
+                
+                <!-- Private links (shown when logged in) -->
+                <a href="dashboard.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
+                <a href="analytics.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
+                <a href="tracking.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
+                <a href="portal.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
+                <a href="affiliate.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
+                <a href="training.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Training</a>
+                <a href="contact.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Contact</a>
+                <button onclick="logout()" data-auth="true" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            </div>
             
             <!-- Mobile -->
             <div class="md:hidden flex items-center gap-2">
-                <a href="login.html" class="px-3 py-1.5 text-xs text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
-                <a href="register.html" class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up</a>
+                <a href="login.html" data-auth="false" class="px-3 py-1.5 text-xs text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                <a href="register.html" data-auth="false" class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up</a>
+                <button onclick="logout()" data-auth="true" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
                 <div class="hamburger ml-1" onclick="toggleMobileMenu()">
                     <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
                     <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
@@ -140,14 +142,25 @@
         <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
             <div class="py-3 space-y-1">
-                <a href="#features" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Features</a>
-                <a href="#pricing" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Pricing</a>
-                <a href="#how-it-works" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">How It Works</a>
-                <a href="#faq" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">FAQ</a>
-                <a href="tracking.html" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track Package</a>
-                <div class="border-t border-gray-100 pt-3 mt-2 flex flex-col gap-2 px-3">
-                    <a href="login.html" class="block text-center px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm">Login</a>
-                    <a href="register.html" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm">Sign Up Free →</a>
+                <!-- Public links -->
+                <a href="#features" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Features</a>
+                <a href="#pricing" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Pricing</a>
+                <a href="#how-it-works" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">How It Works</a>
+                <a href="#faq" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">FAQ</a>
+                <a href="tracking.html" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="login.html" data-auth="false" class="block px-3 py-2 text-sm text-blue-600 font-medium rounded-lg transition" onclick="closeMobileMenu()">Login</a>
+                
+                <!-- Private links -->
+                <a href="dashboard.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
+                <a href="analytics.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
+                <a href="tracking.html" data-auth="true" class="block px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
+                <a href="portal.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
+                <a href="affiliate.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
+                <a href="training.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Training</a>
+                <a href="contact.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Contact</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
+                    <button onclick="logout()" data-auth="true" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
+                    <a href="register.html" data-auth="false" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm mt-2">Sign Up Free →</a>
                 </div>
             </div>
         </div>
@@ -346,7 +359,8 @@
 </footer>
 
 <script>
-    // Mobile Menu Functions
+    // ==================== MOBILE MENU ====================
+    
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const hamburger = document.querySelector('.hamburger');
@@ -369,24 +383,34 @@
         if (window.innerWidth >= 768) { closeMobileMenu(); }
     });
     
-    // Auto-update nav for logged-in users
-    const token = localStorage.getItem('token');
-    if (token) {
-        const loginBtns = document.querySelectorAll('a[href="login.html"]');
-        loginBtns.forEach(btn => {
-            if (!btn.closest('.mobile-menu') || btn.textContent.trim() !== 'Login') {
-                btn.textContent = 'Dashboard';
-                btn.href = 'dashboard.html';
-            }
-        });
-        const signupBtns = document.querySelectorAll('a[href="register.html"]');
-        signupBtns.forEach(btn => {
-            if (!btn.closest('.mobile-menu') || btn.textContent.trim() !== 'Sign Up') {
-                btn.textContent = 'Dashboard';
-                btn.href = 'dashboard.html';
-            }
-        });
+    // ==================== AUTH-NAV ====================
+    
+    function updateNavigation() {
+        const token = localStorage.getItem('token');
+        const isLoggedIn = token && token !== 'null' && token !== 'undefined';
+        
+        if (isLoggedIn) {
+            document.body.classList.add('logged-in');
+        } else {
+            document.body.classList.remove('logged-in');
+        }
     }
+    
+    function logout() {
+        localStorage.removeItem('token');
+        window.location.href = '/';
+    }
+    
+    // Run on load
+    updateNavigation();
+    
+    // Listen for storage changes (login/logout from other tabs)
+    window.addEventListener('storage', function(e) {
+        if (e.key === 'token') {
+            updateNavigation();
+        }
+    });
 </script>
+
 </body>
 </html>
