@@ -26,9 +26,8 @@
     <meta name="twitter:description" content="Ship from China & USA to South Africa in 10-15 days. DDP customs clearance included.">
     <meta name="twitter:image" content="https://dropshipforwarder.co.za/twitter-image.jpg">
     
-
-     <!-- Font Awesome Icons -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 
     <!-- Canonical URL -->
     <link rel="canonical" href="https://dropshipforwarder.co.za/">
@@ -59,11 +58,7 @@
         "description": "Freight forwarding platform for South African dropshippers shipping from China and USA."
     }
     </script>
-    
-    <!-- Toast & Chat -->
-    <script src="/toast.js"></script>
-    <script src="/chat-support.js"></script>
-    
+
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
@@ -71,100 +66,67 @@
         .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
         .card-hover { transition: transform 0.3s ease, box-shadow 0.3s ease; }
         .card-hover:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(0,0,0,0.1); }
+        .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
         .mobile-menu { transition: all 0.3s ease; max-height: 0; overflow: hidden; }
         .mobile-menu.open { max-height: 500px; }
-        .hamburger { cursor: pointer; display: flex; flex-direction: column; align-items: center; }
-        .hamburger div { transition: all 0.3s ease; width: 24px; height: 2px; background: #1f2937; margin: 3px 0; border-radius: 2px; }
+        .hamburger { cursor: pointer; }
+        .hamburger div { transition: all 0.3s ease; }
         .hamburger.active div:nth-child(1) { transform: rotate(45deg) translate(5px, 5px); }
         .hamburger.active div:nth-child(2) { opacity: 0; }
         .hamburger.active div:nth-child(3) { transform: rotate(-45deg) translate(5px, -5px); }
-        .top-bar { background: linear-gradient(90deg, #1e40af, #7c3aed); }
-        [data-auth="true"] { display: none; }
-        .logged-in [data-auth="true"] { display: inline-block; }
-        .logged-in [data-auth="false"] { display: none; }
     </style>
 </head>
 <body class="bg-white">
 
-<!-- TOP BAR -->
-<div class="top-bar text-white text-center py-1.5 px-3 text-xs" style="background: linear-gradient(90deg, #1e40af, #7c3aed);">
-    <div class="max-w-7xl mx-auto flex flex-wrap justify-center items-center gap-1 sm:gap-3">
-        <span>🔥 Dropship Forwarder</span>
-        <span class="hidden sm:inline text-gray-300">|</span>
-        <span>🚀 14-Day Free Trial</span>
-        <span class="hidden sm:inline text-gray-300">|</span>
-        <span class="hidden xs:inline">⚡ Ship China → SA</span>
-        <span class="hidden sm:inline text-gray-300">|</span>
-        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up →</a>
+<!-- TOP MARKETING BAR -->
+<div class="top-bar text-white text-center py-2 px-4 text-sm">
+    <div class="max-w-7xl mx-auto flex flex-col sm:flex-row justify-center items-center gap-2">
+        <span class="font-bold">🚀 14-DAY FREE TRIAL</span>
+        <span>|</span>
+        <span>⚡ Ship from China & USA to SA in 10-15 days</span>
+        <span>|</span>
+        <a href="register.html" class="text-white underline font-semibold hover:text-blue-200 transition">Sign Up Now →</a>
     </div>
 </div>
 
 <!-- Navigation -->
 <nav class="bg-white shadow-md sticky top-0 z-50">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div class="flex justify-between items-center h-14 sm:h-16">
-            <!-- Logo -->
-            <a href="/" class="text-lg sm:text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
+        <div class="flex justify-between items-center h-16">
+            <a href="/" class="text-xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent flex-shrink-0">
                 Dropship Forwarder
             </a>
             
-            <!-- Desktop Menu -->
-            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
-                <!-- Public links (shown when logged out) -->
-                <a href="#features" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Features</a>
-                <a href="#pricing" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Pricing</a>
-                <a href="#how-it-works" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">How It Works</a>
-                <a href="#faq" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">FAQ</a>
-                <a href="tracking.html" data-auth="false" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-                <a href="login.html" data-auth="false" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition text-sm">Login</a>
-                <a href="register.html" data-auth="false" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg text-sm">Sign Up Free →</a>
-                
-                <!-- Private links (shown when logged in) -->
-                <a href="dashboard.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Dashboard</a>
-                <a href="analytics.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Analytics</a>
-                <a href="tracking.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Track</a>
-                <a href="portal.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Portal</a>
-                <a href="affiliate.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Affiliate</a>
-                <a href="training.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Training</a>
-                <a href="contact.html" data-auth="true" class="text-gray-700 hover:text-blue-600 transition text-sm">Contact</a>
-                <button onclick="logout()" data-auth="true" class="bg-red-500 text-white px-4 py-2 rounded-lg text-sm hover:bg-red-600 transition">Logout</button>
+            <div class="hidden md:flex items-center space-x-8">
+                <a href="#features" class="text-gray-700 hover:text-blue-600 transition">Features</a>
+                <a href="#pricing" class="text-gray-700 hover:text-blue-600 transition">Pricing</a>
+                <a href="#how-it-works" class="text-gray-700 hover:text-blue-600 transition">How It Works</a>
+                <a href="#faq" class="text-gray-700 hover:text-blue-600 transition">FAQ</a>
+                <a href="tracking.html" class="text-gray-700 hover:text-blue-600 transition">Track</a>
+                <a href="login.html" class="px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                <a href="register.html" class="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">Sign Up Free →</a>
             </div>
             
-            <!-- Mobile -->
-            <div class="md:hidden flex items-center gap-2">
-                <a href="login.html" data-auth="false" class="px-3 py-1.5 text-xs text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
-                <a href="register.html" data-auth="false" class="px-3 py-1.5 text-xs bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition">Sign Up</a>
-                <button onclick="logout()" data-auth="true" class="px-3 py-1.5 text-xs bg-red-500 text-white rounded-lg hover:bg-red-600 transition">Logout</button>
-                <div class="hamburger ml-1" onclick="toggleMobileMenu()">
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
-                    <div class="w-6 h-0.5 bg-gray-800 my-1.5"></div>
+            <div class="md:hidden flex items-center gap-3">
+                <a href="login.html" class="px-3 py-1.5 text-sm text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                <div class="hamburger" onclick="toggleMobileMenu()">
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
+                    <div class="w-7 h-0.5 bg-gray-800 my-1.5"></div>
                 </div>
             </div>
         </div>
         
-        <!-- Mobile Menu -->
         <div id="mobileMenu" class="mobile-menu md:hidden bg-white border-t border-gray-100">
-            <div class="py-3 space-y-1">
-                <!-- Public links -->
-                <a href="#features" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Features</a>
-                <a href="#pricing" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Pricing</a>
-                <a href="#how-it-works" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">How It Works</a>
-                <a href="#faq" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">FAQ</a>
-                <a href="tracking.html" data-auth="false" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
-                <a href="login.html" data-auth="false" class="block px-3 py-2 text-sm text-blue-600 font-medium rounded-lg transition" onclick="closeMobileMenu()">Login</a>
-                
-                <!-- Private links -->
-                <a href="dashboard.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Dashboard</a>
-                <a href="analytics.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Analytics</a>
-                <a href="tracking.html" data-auth="true" class="block px-3 py-2 text-sm text-blue-600 font-medium bg-blue-50 rounded-lg transition" onclick="closeMobileMenu()">Track</a>
-                <a href="portal.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Portal</a>
-                <a href="affiliate.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Affiliate</a>
-                <a href="training.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Training</a>
-                <a href="contact.html" data-auth="true" class="block px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Contact</a>
-                <div class="border-t border-gray-100 pt-3 mt-2 px-3">
-                    <button onclick="logout()" data-auth="true" class="w-full text-center px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition text-sm">Logout</button>
-                    <a href="register.html" data-auth="false" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition text-sm mt-2">Sign Up Free →</a>
+            <div class="py-3 space-y-2">
+                <a href="#features" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Features</a>
+                <a href="#pricing" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Pricing</a>
+                <a href="#how-it-works" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">How It Works</a>
+                <a href="#faq" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">FAQ</a>
+                <a href="tracking.html" class="block px-3 py-2 text-gray-700 hover:bg-gray-50 rounded-lg transition" onclick="closeMobileMenu()">Track Package</a>
+                <div class="border-t border-gray-100 pt-3 mt-2 flex flex-col gap-2">
+                    <a href="login.html" class="block text-center px-4 py-2 text-blue-600 border border-blue-600 rounded-lg hover:bg-blue-50 transition">Login</a>
+                    <a href="register.html" class="block text-center px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition shadow-lg">Sign Up Free →</a>
                 </div>
             </div>
         </div>
@@ -172,7 +134,7 @@
 </nav>
 
 <!-- Hero Section -->
-<section class="pt-8 pb-20 bg-gradient-to-br from-blue-50 to-indigo-100">
+<section class="pt-16 pb-20 bg-gradient-to-br from-blue-50 to-indigo-100">
     <div class="max-w-7xl mx-auto px-4 text-center">
         <div class="inline-block px-3 py-1 bg-green-100 text-green-700 rounded-full text-sm font-semibold mb-4">
             🚀 Trusted by 500+ South African Dropshippers
@@ -238,7 +200,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- FAQ -->
 <section id="faq" class="py-20 bg-white">
@@ -363,58 +324,439 @@
     </div>
 </footer>
 
+<!-- ==================== CHAT SUPPORT WIDGET (INLINE) ==================== -->
 <script>
-    // ==================== MOBILE MENU ====================
+// ==================== CHAT SUPPORT WIDGET ====================
+
+(function() {
+    // Create chat widget container
+    const chatContainer = document.createElement('div');
+    chatContainer.id = 'chatWidget';
+    chatContainer.innerHTML = `
+        <style>
+            #chatWidget {
+                position: fixed;
+                bottom: 24px;
+                right: 24px;
+                z-index: 9999;
+                font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            }
+            #chatToggle {
+                width: 60px;
+                height: 60px;
+                border-radius: 50%;
+                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                color: white;
+                border: none;
+                box-shadow: 0 4px 20px rgba(59, 130, 246, 0.4);
+                cursor: pointer;
+                font-size: 28px;
+                transition: all 0.3s ease;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: relative;
+            }
+            #chatToggle:hover {
+                transform: scale(1.1);
+                box-shadow: 0 6px 30px rgba(59, 130, 246, 0.6);
+            }
+            #chatToggle .online-dot {
+                position: absolute;
+                top: 4px;
+                right: 4px;
+                width: 14px;
+                height: 14px;
+                background: #10b981;
+                border-radius: 50%;
+                border: 2px solid white;
+                animation: pulse-dot 2s infinite;
+            }
+            @keyframes pulse-dot {
+                0% { transform: scale(1); opacity: 1; }
+                50% { transform: scale(1.3); opacity: 0.7; }
+                100% { transform: scale(1); opacity: 1; }
+            }
+            #chatWindow {
+                position: fixed;
+                bottom: 100px;
+                right: 24px;
+                width: 380px;
+                max-width: calc(100vw - 48px);
+                max-height: 520px;
+                background: white;
+                border-radius: 16px;
+                box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+                display: none;
+                flex-direction: column;
+                overflow: hidden;
+                animation: slideUp 0.3s ease;
+                border: 1px solid rgba(0,0,0,0.05);
+            }
+            #chatWindow.open {
+                display: flex;
+            }
+            @keyframes slideUp {
+                from { opacity: 0; transform: translateY(20px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+            #chatHeader {
+                background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+                color: white;
+                padding: 16px 20px;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            #chatHeader h4 {
+                margin: 0;
+                font-size: 16px;
+                font-weight: 600;
+            }
+            #chatHeader .close-btn {
+                background: rgba(255,255,255,0.2);
+                border: none;
+                color: white;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                cursor: pointer;
+                font-size: 18px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s;
+            }
+            #chatHeader .close-btn:hover {
+                background: rgba(255,255,255,0.3);
+            }
+            #chatMessages {
+                flex: 1;
+                padding: 16px 20px;
+                overflow-y: auto;
+                max-height: 340px;
+                background: #f9fafb;
+            }
+            #chatMessages .message {
+                margin-bottom: 12px;
+                display: flex;
+            }
+            #chatMessages .message.bot {
+                justify-content: flex-start;
+            }
+            #chatMessages .message.user {
+                justify-content: flex-end;
+            }
+            #chatMessages .message .bubble {
+                max-width: 80%;
+                padding: 10px 14px;
+                border-radius: 12px;
+                font-size: 14px;
+                line-height: 1.5;
+                word-wrap: break-word;
+            }
+            #chatMessages .message.bot .bubble {
+                background: white;
+                color: #1f2937;
+                border-bottom-left-radius: 4px;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+            }
+            #chatMessages .message.user .bubble {
+                background: #3b82f6;
+                color: white;
+                border-bottom-right-radius: 4px;
+            }
+            #chatMessages .message .bubble .time {
+                font-size: 10px;
+                opacity: 0.6;
+                margin-top: 4px;
+                display: block;
+            }
+            #chatMessages .typing-indicator {
+                display: flex;
+                gap: 4px;
+                padding: 8px 12px;
+                background: white;
+                border-radius: 12px;
+                width: fit-content;
+                margin-bottom: 12px;
+            }
+            #chatMessages .typing-indicator span {
+                width: 8px;
+                height: 8px;
+                background: #94a3b8;
+                border-radius: 50%;
+                animation: typing 1.4s infinite both;
+            }
+            #chatMessages .typing-indicator span:nth-child(2) { animation-delay: 0.2s; }
+            #chatMessages .typing-indicator span:nth-child(3) { animation-delay: 0.4s; }
+            @keyframes typing {
+                0% { transform: translateY(0); }
+                50% { transform: translateY(-6px); }
+                100% { transform: translateY(0); }
+            }
+            #chatInput {
+                display: flex;
+                padding: 12px 16px;
+                border-top: 1px solid #e5e7eb;
+                background: white;
+                gap: 8px;
+            }
+            #chatInput input {
+                flex: 1;
+                border: 1px solid #d1d5db;
+                border-radius: 8px;
+                padding: 10px 14px;
+                font-size: 14px;
+                outline: none;
+                transition: border 0.2s;
+            }
+            #chatInput input:focus {
+                border-color: #3b82f6;
+                box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            }
+            #chatInput button {
+                background: #3b82f6;
+                color: white;
+                border: none;
+                border-radius: 8px;
+                padding: 10px 16px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: background 0.2s;
+            }
+            #chatInput button:hover {
+                background: #2563eb;
+            }
+            #chatInput button:disabled {
+                opacity: 0.5;
+                cursor: not-allowed;
+            }
+            #chatStatus {
+                font-size: 12px;
+                color: #9ca3af;
+                text-align: center;
+                padding: 8px;
+                background: #f9fafb;
+                border-top: 1px solid #e5e7eb;
+            }
+            #chatStatus .online {
+                color: #10b981;
+                font-weight: 500;
+            }
+            @media (max-width: 480px) {
+                #chatWindow {
+                    bottom: 80px;
+                    right: 16px;
+                    width: calc(100vw - 32px);
+                    max-height: 60vh;
+                }
+                #chatToggle {
+                    width: 52px;
+                    height: 52px;
+                    font-size: 24px;
+                }
+            }
+        </style>
+        
+        <button id="chatToggle" aria-label="Open chat support">
+            💬
+            <span class="online-dot"></span>
+        </button>
+        
+        <div id="chatWindow">
+            <div id="chatHeader">
+                <h4>💬 Support Chat</h4>
+                <button class="close-btn" id="chatClose">✕</button>
+            </div>
+            <div id="chatMessages">
+                <div class="message bot">
+                    <div class="bubble">
+                        👋 Hello! Welcome to Dropship Forwarder.<br>
+                        How can I help you today?
+                        <span class="time">Just now</span>
+                    </div>
+                </div>
+            </div>
+            <div id="chatInput">
+                <input type="text" id="chatInputField" placeholder="Type your message..." maxlength="500">
+                <button id="chatSendBtn">Send</button>
+            </div>
+            <div id="chatStatus">
+                <span class="online">● Online</span> — We reply within minutes
+            </div>
+        </div>
+    `;
     
+    document.body.appendChild(chatContainer);
+    
+    // ==================== CHAT LOGIC ====================
+    
+    const chatToggle = document.getElementById('chatToggle');
+    const chatWindow = document.getElementById('chatWindow');
+    const chatClose = document.getElementById('chatClose');
+    const chatInput = document.getElementById('chatInputField');
+    const chatSendBtn = document.getElementById('chatSendBtn');
+    const chatMessages = document.getElementById('chatMessages');
+    
+    let isOpen = false;
+    let isTyping = false;
+    
+    // Toggle chat window
+    function toggleChat() {
+        isOpen = !isOpen;
+        chatWindow.classList.toggle('open', isOpen);
+        if (isOpen) {
+            chatInput.focus();
+        }
+    }
+    
+    chatToggle.addEventListener('click', toggleChat);
+    chatClose.addEventListener('click', toggleChat);
+    
+    // Auto-reply function
+    function getAutoReply(message) {
+        const lower = message.toLowerCase();
+        if (lower.includes('hello') || lower.includes('hi') || lower.includes('hey')) {
+            return "Hello! 👋 How can I help you with your shipping needs today?";
+        } else if (lower.includes('tracking') || lower.includes('track')) {
+            return "📦 You can track your package here: https://dropshipforwarder.co.za/tracking.html\n\nJust enter your tracking number!";
+        } else if (lower.includes('price') || lower.includes('cost') || lower.includes('pricing')) {
+            return "💰 Our pricing starts at R499/month for the Starter plan. Check out our pricing section on the homepage for more details!";
+        } else if (lower.includes('ship') || lower.includes('shipping')) {
+            return "🚢 We ship from China and USA to South Africa in 10-15 days. DDP customs clearance included!";
+        } else if (lower.includes('customs') || lower.includes('ddp')) {
+            return "🛃 We handle all customs clearance with DDP (Delivered Duty Paid). Your customer pays nothing extra!";
+        } else if (lower.includes('trial') || lower.includes('free')) {
+            return "🎉 Yes! We offer a 14-day free trial. No credit card required. Sign up here: https://dropshipforwarder.co.za/register.html";
+        } else if (lower.includes('thank')) {
+            return "You're welcome! 😊 Is there anything else I can help with?";
+        } else if (lower.includes('bye') || lower.includes('goodbye')) {
+            return "Goodbye! 👋 Have a great day! Feel free to reach out anytime.";
+        } else if (lower.includes('help')) {
+            return "🆘 I'm here to help! You can ask me about:\n• Shipping\n• Tracking\n• Pricing\n• Customs/DDP\n• Free trial\n• Anything else!";
+        } else {
+            return "Thanks for your message! 📩 Our support team will get back to you shortly. In the meantime, check out our FAQ page.";
+        }
+    }
+    
+    // Send message
+    function sendMessage() {
+        const message = chatInput.value.trim();
+        if (!message) return;
+        
+        // Add user message
+        addMessage(message, 'user');
+        chatInput.value = '';
+        chatSendBtn.disabled = true;
+        
+        // Show typing indicator
+        showTyping();
+        
+        // Auto-reply after delay
+        setTimeout(() => {
+            hideTyping();
+            const reply = getAutoReply(message);
+            addMessage(reply, 'bot');
+            chatSendBtn.disabled = false;
+        }, 800 + Math.random() * 600);
+    }
+    
+    function addMessage(text, sender) {
+        const messageDiv = document.createElement('div');
+        messageDiv.className = `message ${sender}`;
+        
+        const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+        
+        messageDiv.innerHTML = `
+            <div class="bubble">
+                ${text.replace(/\n/g, '<br>')}
+                <span class="time">${time}</span>
+            </div>
+        `;
+        
+        chatMessages.appendChild(messageDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+    }
+    
+    function showTyping() {
+        const typingDiv = document.createElement('div');
+        typingDiv.className = 'typing-indicator';
+        typingDiv.id = 'typingIndicator';
+        typingDiv.innerHTML = `<span></span><span></span><span></span>`;
+        chatMessages.appendChild(typingDiv);
+        chatMessages.scrollTop = chatMessages.scrollHeight;
+        isTyping = true;
+    }
+    
+    function hideTyping() {
+        const indicator = document.getElementById('typingIndicator');
+        if (indicator) indicator.remove();
+        isTyping = false;
+    }
+    
+    // Event listeners
+    chatSendBtn.addEventListener('click', sendMessage);
+    chatInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') {
+            e.preventDefault();
+            sendMessage();
+        }
+    });
+    
+    // Auto-open after 10 seconds (only once per session)
+    let hasOpened = sessionStorage.getItem('chatOpened');
+    if (!hasOpened) {
+        setTimeout(() => {
+            if (!isOpen) {
+                toggleChat();
+                sessionStorage.setItem('chatOpened', 'true');
+            }
+        }, 10000);
+    }
+    
+    console.log('💬 Chat support widget loaded!');
+})();
+</script>
+
+<!-- ==================== MOBILE MENU & AUTH LOGIC ==================== -->
+<script>
+    // Mobile Menu Toggle
     function toggleMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const hamburger = document.querySelector('.hamburger');
-        if (menu) {
-            menu.classList.toggle('open');
-            if (hamburger) hamburger.classList.toggle('active');
-        }
+        menu.classList.toggle('open');
+        hamburger.classList.toggle('active');
     }
     
     function closeMobileMenu() {
         const menu = document.getElementById('mobileMenu');
         const hamburger = document.querySelector('.hamburger');
-        if (menu) {
-            menu.classList.remove('open');
-            if (hamburger) hamburger.classList.remove('active');
-        }
+        menu.classList.remove('open');
+        hamburger.classList.remove('active');
     }
     
+    // Auto-close menu on resize to desktop
     window.addEventListener('resize', function() {
-        if (window.innerWidth >= 768) { closeMobileMenu(); }
-    });
-    
-    // ==================== AUTH-NAV ====================
-    
-    function updateNavigation() {
-        const token = localStorage.getItem('token');
-        const isLoggedIn = token && token !== 'null' && token !== 'undefined';
-        
-        if (isLoggedIn) {
-            document.body.classList.add('logged-in');
-        } else {
-            document.body.classList.remove('logged-in');
-        }
-    }
-    
-    function logout() {
-        localStorage.removeItem('token');
-        window.location.href = '/';
-    }
-    
-    // Run on load
-    updateNavigation();
-    
-    // Listen for storage changes (login/logout from other tabs)
-    window.addEventListener('storage', function(e) {
-        if (e.key === 'token') {
-            updateNavigation();
+        if (window.innerWidth >= 768) {
+            closeMobileMenu();
         }
     });
+    
+    // Check if user is logged in
+    const token = localStorage.getItem('token');
+    if (token) {
+        const loginBtns = document.querySelectorAll('a[href="login.html"]');
+        loginBtns.forEach(btn => {
+            btn.textContent = 'Dashboard';
+            btn.href = 'dashboard.html';
+        });
+        const signupBtns = document.querySelectorAll('a[href="register.html"]');
+        signupBtns.forEach(btn => {
+            btn.textContent = 'Dashboard';
+            btn.href = 'dashboard.html';
+        });
+    }
 </script>
 
 </body>
