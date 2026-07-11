@@ -1,0 +1,5 @@
+# render.yaml
+staticSites:
+  - name: dropship-forwarder-frontend
+    buildCommand: ""
+    publishDirectory: frontend
