@@ -1,29 +1,24 @@
 {
-  "name": "dropship-forwarder",
+  "name": "dropship-forwarder-backend",
   "version": "1.0.0",
+  "description": "Dropship Forwarder API",
   "main": "server.js",
   "scripts": {
     "start": "node server.js",
-    "dev": "nodemon server.js"
+    "postinstall": "npm rebuild sqlite3 --build-from-source"
   },
   "dependencies": {
-    "@ngelekanyo/payfast-subscribe": "^1.0.18",
-    "axios": "^1.16.1",
-    "bcrypt": "^5.1.1",
-    "cors": "^2.8.5",
-    "crypto": "^1.0.1",
-    "csv-parser": "^3.2.1",
-    "dotenv": "^16.3.1",
     "express": "^4.18.2",
+    "sqlite3": "^5.1.6",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^16.3.1",
+    "cors": "^2.8.5",
     "express-rate-limit": "^7.1.5",
     "express-validator": "^7.0.1",
-    "jsonwebtoken": "^9.0.2",
-    "multer": "^2.1.1",
-    "nodemailer": "^8.0.7",
-    "sqlite3": "^5.1.6",
-    "twilio": "^6.0.2"
-  },
-  "devDependencies": {
-    "nodemon": "^3.0.1"
+    "multer": "^1.4.5",
+    "csv-parser": "^3.0.0",
+    "nodemailer": "^6.9.7",
+    "axios": "^1.6.2"
   }
 }
